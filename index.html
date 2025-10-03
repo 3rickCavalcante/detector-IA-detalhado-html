@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detector de IA - Análise Detalhada</title>
+    <title>Detector de IA - Análise Avançada</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -29,8 +29,10 @@
             background: #2563eb; color: white; border: none; 
             padding: 15px 30px; border-radius: 10px; font-size: 1.1rem; 
             cursor: pointer; width: 100%; margin-bottom: 20px;
+            transition: all 0.3s ease;
         }
-        .analyze-btn:disabled { background: #94a3b8; cursor: not-allowed; }
+        .analyze-btn:hover { background: #1d4ed8; transform: translateY(-2px); }
+        .analyze-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
         .result { margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 10px; }
         .stats { background: #e2e8f0; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
         
@@ -52,6 +54,8 @@
         .termo-suspeito[data-tipo="conectivo_complexo"] { border-color: #8b5cf6; background-color: #faf5ff; }
         .termo-suspeito[data-tipo="voz_passiva"] { border-color: #06b6d4; background-color: #ecfeff; }
         .termo-suspeito[data-tipo="superlativo"] { border-color: #f59e0b; background-color: #fffbeb; }
+        .termo-suspeito[data-tipo="repeticao"] { border-color: #dc2626; background-color: #fef2f2; }
+        .termo-suspeito[data-tipo="estrutura_complexa"] { border-color: #7c3aed; background-color: #f5f3ff; }
         
         .texto-destacado {
             background: white;
@@ -106,13 +110,55 @@
             height: 15px;
             border-radius: 3px;
         }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .metricas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .metrica-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .metrica-valor {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .dica {
+            background: #dbeafe;
+            border-left: 4px solid #2563eb;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Detector de IA - Análise Detalhada</h1>
-            <p>Identifique termos e expressões suspeitos de terem sido gerados por IA</p>
+            <h1>🔍 Detector de IA - Análise Avançada</h1>
+            <p>Identifique termos e expressões suspeitos de terem sido gerados por IA com maior precisão</p>
         </div>
         
         <div class="app-card">
@@ -120,7 +166,7 @@
             <textarea class="text-area" id="textInput" placeholder="Cole o texto que deseja analisar aqui..."></textarea>
             
             <div class="stats" id="textStats">
-                Caracteres: 0 | Palavras: 0 | Frases: 0
+                Caracteres: 0 | Palavras: 0 | Frases: 0 | Parágrafos: 0
             </div>
             
             <button class="analyze-btn" onclick="analyzeText()" id="analyzeBtn">Analisar Texto</button>
@@ -129,28 +175,53 @@
     </div>
     
     <script>
-        // Padrões linguísticos típicos de IA
+        // Padrões linguísticos típicos de IA (expandidos)
         const padroesIA = {
             'expressoes_formais': [
                 'é importante destacar', 'convém ressaltar', 'considerando os fatores',
                 'pode-se inferir', 'é fundamental observar', 'observa-se que',
                 'conclui-se que', 'de maneira clara e objetiva', 'abordagem sistemática',
                 'o presente estudo', 'de acordo com', 'vale ressaltar', 'verifica-se que',
-                'cabe salientar', 'é pertinente mencionar', 'pressupõe-se que'
+                'cabe salientar', 'é pertinente mencionar', 'pressupõe-se que',
+                'constata-se que', 'infere-se que', 'depreende-se que', 'evidencia-se que',
+                'recomenda-se que', 'sugere-se que', 'propõe-se que', 'argumenta-se que',
+                'destaca-se que', 'salienta-se que', 'ressalta-se que', 'enfatiza-se que',
+                'sob essa perspectiva', 'nesse contexto', 'nesse sentido', 'nesse cenário',
+                'nessa conjuntura', 'nessa ótica', 'nessa perspectiva'
             ],
             'conectivos_complexos': [
                 'portanto', 'consequentemente', 'adicionalmente', 'notavelmente',
-                'consideravelmente', 'significativamente', 'efetivamente'
+                'consideravelmente', 'significativamente', 'efetivamente',
+                'sobretudo', 'principalmente', 'especialmente', 'particularmente',
+                'igualmente', 'similarmente', 'analogamente', 'paralelamente',
+                'reciprocamente', 'correlatamente', 'correspondentemente'
             ],
             'estruturas_passivas': [
                 'é realizado', 'é observado', 'é verificado', 'é constatado',
-                'é possível identificar', 'pode ser observado', 'deve ser considerado'
+                'é possível identificar', 'pode ser observado', 'deve ser considerado',
+                'são apresentados', 'foram analisados', 'será discutido', 'pode ser verificado',
+                'devem ser considerados', 'podem ser observados', 'poderão ser implementados'
             ],
             'palavras_superlativas': [
                 'extremamente', 'altamente', 'profundamente', 'intensamente',
-                'significativamente', 'consideravelmente', 'notavelmente'
+                'significativamente', 'consideravelmente', 'notavelmente',
+                'expressivamente', 'substancialmente', 'exponencialmente',
+                'excepcionalmente', 'extraordinariamente', 'surpreendentemente'
+            ],
+            'expressoes_impessoais': [
+                'há que se considerar', 'cabe mencionar', 'convém notar',
+                'vale observar', 'importa destacar', 'cumpre ressaltar',
+                'impõe-se considerar', 'recomenda-se atentar', 'sugere-se observar'
             ]
         };
+
+        // Palavras e expressões tipicamente humanas
+        const padroesHumanos = [
+            'tipo', 'assim', 'ok', 'bem', 'acho', 'tá', 'né', 'uai', 'oxente',
+            'caramba', 'poxa', 'nossa', 'aff', 'puts', 'mano', 'cara', 'velho',
+            'tipo assim', 'sei lá', 'de repente', 'do nada', 'na moral',
+            'fui lá', 'daí', 'aí', 'então', 'sabe', 'tá ligado', 'cê acredita'
+        ];
 
         // Função para tokenizar texto
         function tokenizacaoSimples(texto) {
@@ -164,10 +235,135 @@
             return frases.filter(f => f.trim()).map(f => f.trim());
         }
 
+        // Função para dividir parágrafos
+        function dividirParagrafos(texto) {
+            const paragrafos = texto.split(/\n\s*\n/);
+            return paragrafos.filter(p => p.trim()).map(p => p.trim());
+        }
+
+        // Função para analisar repetições
+        function analisarRepeticoes(frases) {
+            const repeticoes = [];
+            const frasesSimplificadas = frases.map(f => 
+                f.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim()
+            );
+            
+            for (let i = 0; i < frasesSimplificadas.length; i++) {
+                for (let j = i + 1; j < frasesSimplificadas.length; j++) {
+                    if (frasesSimplificadas[i] && frasesSimplificadas[j] &&
+                        frasesSimplificadas[i] === frasesSimplificadas[j]) {
+                        repeticoes.push({
+                            frase: frases[i],
+                            tipo: 'repeticao_exata',
+                            justificativa: 'Frase repetida exatamente',
+                            posicao: [i, j]
+                        });
+                    } else if (frasesSimplificadas[i] && frasesSimplificadas[j] &&
+                             calcularSimilaridade(frasesSimplificadas[i], frasesSimplificadas[j]) > 0.8) {
+                        repeticoes.push({
+                            frase: frases[i],
+                            tipo: 'repeticao',
+                            justificativa: 'Frase muito similar detectada',
+                            posicao: [i, j]
+                        });
+                    }
+                }
+            }
+            
+            return repeticoes;
+        }
+
+        // Função para calcular similaridade entre strings
+        function calcularSimilaridade(str1, str2) {
+            const longer = str1.length > str2.length ? str1 : str2;
+            const shorter = str1.length > str2.length ? str2 : str1;
+            
+            if (longer.length === 0) return 1.0;
+            
+            return (longer.length - calcularDistanciaEdicao(longer, shorter)) / parseFloat(longer.length);
+        }
+
+        // Função para calcular distância de edição (Levenshtein)
+        function calcularDistanciaEdicao(s1, s2) {
+            s1 = s1.toLowerCase();
+            s2 = s2.toLowerCase();
+            
+            const costs = [];
+            for (let i = 0; i <= s1.length; i++) {
+                let lastValue = i;
+                for (let j = 0; j <= s2.length; j++) {
+                    if (i === 0) {
+                        costs[j] = j;
+                    } else if (j > 0) {
+                        let newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
+                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
+                        }
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+                if (i > 0) costs[s2.length] = lastValue;
+            }
+            return costs[s2.length];
+        }
+
+        // Função para analisar estrutura complexa
+        function analisarEstruturaComplexa(frases) {
+            const estruturasComplexas = [];
+            
+            frases.forEach((frase, index) => {
+                // Verificar frases muito longas
+                if (frase.split(/\s+/).length > 30) {
+                    estruturasComplexas.push({
+                        termo: frase.substring(0, 50) + '...',
+                        tipo: 'estrutura_complexa',
+                        justificativa: 'Frase excessivamente longa e complexa',
+                        contexto: frase,
+                        posicao: [index, index]
+                    });
+                }
+                
+                // Verificar múltiplas cláusulas
+                const clausulas = frase.split(/[,;:]|\be\b|\bmas\b|\bporém\b|\bcontudo\b/gi);
+                if (clausulas.length >= 3) {
+                    estruturasComplexas.push({
+                        termo: frase.substring(0, 50) + '...',
+                        tipo: 'estrutura_complexa',
+                        justificativa: 'Frases com múltiplas cláusulas e subordinações',
+                        contexto: frase,
+                        posicao: [index, index]
+                    });
+                }
+            });
+            
+            return estruturasComplexas;
+        }
+
+        // Função para analisar emoção no texto
+        function analisarEmocao(texto) {
+            const palavrasPositivas = ['amo', 'adoro', 'incrível', 'maravilhoso', 'fantástico', 'excelente', 'perfeito'];
+            const palavrasNegativas = ['odeio', 'detesto', 'horrível', 'terrível', 'péssimo', 'ruim', 'chato'];
+            const palavrasNeutras = ['considerando', 'observando', 'analisando', 'verificando', 'constatando'];
+            
+            const palavras = tokenizacaoSimples(texto);
+            let emocaoScore = 0;
+            
+            palavras.forEach(palavra => {
+                if (palavrasPositivas.includes(palavra)) emocaoScore += 2;
+                if (palavrasNegativas.includes(palavra)) emocaoScore -= 2;
+                if (palavrasNeutras.includes(palavra)) emocaoScore -= 1;
+            });
+            
+            // Normalizar para escala 0-1
+            return Math.max(0, (emocaoScore + 10) / 20);
+        }
+
         // Função para analisar termos suspeitos
         function analisarTermosSuspeitos(texto) {
             const termosDetectados = [];
             const textoLower = texto.toLowerCase();
+            const frases = dividirFrases(texto);
             
             // Analisar expressões formais típicas de IA
             padroesIA.expressoes_formais.forEach(expressao => {
@@ -186,7 +382,8 @@
                         tipo: 'expressao_formal',
                         justificativa: 'Expressão excessivamente formal comum em textos de IA',
                         contexto: contexto,
-                        posicao: [start, end]
+                        posicao: [start, end],
+                        peso: 1.5 // Peso maior para expressões formais
                     });
                 }
             });
@@ -204,7 +401,8 @@
                             Math.max(0, match.index - 30), 
                             Math.min(texto.length, match.index + match[0].length + 30)
                         ),
-                        posicao: [match.index, match.index + match[0].length]
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: 1.2
                     });
                 }
             });
@@ -222,7 +420,8 @@
                             Math.max(0, match.index - 40), 
                             Math.min(texto.length, match.index + match[0].length + 40)
                         ),
-                        posicao: [match.index, match.index + match[0].length]
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: 1.3
                     });
                 }
             });
@@ -240,9 +439,55 @@
                             Math.max(0, match.index - 25), 
                             Math.min(texto.length, match.index + match[0].length + 25)
                         ),
-                        posicao: [match.index, match.index + match[0].length]
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: 1.1
                     });
                 }
+            });
+            
+            // Analisar expressões impessoais
+            padroesIA.expressoes_impessoais.forEach(expressao => {
+                const regex = new RegExp(expressao, 'gi');
+                let match;
+                while ((match = regex.exec(textoLower)) !== null) {
+                    termosDetectados.push({
+                        termo: texto.substring(match.index, match.index + match[0].length),
+                        tipo: 'expressao_formal',
+                        justificativa: 'Expressão impessoal típica de linguagem formal/IA',
+                        contexto: texto.substring(
+                            Math.max(0, match.index - 40), 
+                            Math.min(texto.length, match.index + match[0].length + 40)
+                        ),
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: 1.4
+                    });
+                }
+            });
+            
+            // Analisar repetições
+            const repeticoes = analisarRepeticoes(frases);
+            repeticoes.forEach(rep => {
+                termosDetectados.push({
+                    termo: rep.frase.substring(0, 50) + (rep.frase.length > 50 ? '...' : ''),
+                    tipo: 'repeticao',
+                    justificativa: rep.justificativa,
+                    contexto: `Repetição nas frases ${rep.posicao[0] + 1} e ${rep.posicao[1] + 1}`,
+                    posicao: [0, 0], // Posição não aplicável para repetições
+                    peso: 1.6 // Alto peso para repetições
+                });
+            });
+            
+            // Analisar estruturas complexas
+            const estruturasComplexas = analisarEstruturaComplexa(frases);
+            estruturasComplexas.forEach(est => {
+                termosDetectados.push({
+                    termo: est.termo,
+                    tipo: 'estrutura_complexa',
+                    justificativa: est.justificativa,
+                    contexto: est.contexto,
+                    posicao: est.posicao,
+                    peso: 1.3
+                });
             });
             
             return termosDetectados;
@@ -256,7 +501,9 @@
             
             let textoDestacado = texto;
             // Ordenar termos por posição (do final para o início para evitar problemas com índices)
-            const termosOrdenados = [...termosDetectados].sort((a, b) => b.posicao[0] - a.posicao[0]);
+            const termosOrdenados = [...termosDetectados]
+                .filter(termo => termo.posicao[0] !== 0) // Filtrar repetições sem posição específica
+                .sort((a, b) => b.posicao[0] - a.posicao[0]);
             
             termosOrdenados.forEach(termoInfo => {
                 const [start, end] = termoInfo.posicao;
@@ -283,27 +530,54 @@
             
             const palavras = tokenizacaoSimples(textoAnalise);
             const frases = dividirFrases(textoAnalise);
+            const paragrafos = dividirParagrafos(texto);
             
             const features = {};
             features.comprimento = texto.length;
             features.num_palavras = palavras.length;
             features.num_frases = frases.length;
+            features.num_paragrafos = paragrafos.length;
             
             if (palavras.length > 0) {
                 features.comp_medio_palavra = palavras.reduce((sum, p) => sum + p.length, 0) / palavras.length;
                 features.palavras_por_frase = frases.length > 0 ? palavras.length / frases.length : 0;
+                features.palavras_por_paragrafo = paragrafos.length > 0 ? palavras.length / paragrafos.length : 0;
                 features.diversidade_lexical = new Set(palavras).size / palavras.length;
             } else {
                 features.comp_medio_palavra = 0;
                 features.palavras_por_frase = 0;
+                features.palavras_por_paragrafo = 0;
                 features.diversidade_lexical = 0;
             }
             
             features.palavras_longas = palavras.length > 0 ? 
                 palavras.filter(p => p.length > 6).length / palavras.length : 0;
             features.formalidade = calcularFormalidade(textoAnalise);
+            features.emocao = analisarEmocao(textoAnalise);
+            features.coesao = calcularCoesao(paragrafos);
             
             return features;
+        }
+
+        // Função para calcular coesão entre parágrafos
+        function calcularCoesao(paragrafos) {
+            if (paragrafos.length <= 1) return 1;
+            
+            let similaridadeTotal = 0;
+            let pares = 0;
+            
+            for (let i = 0; i < paragrafos.length - 1; i++) {
+                for (let j = i + 1; j < Math.min(i + 3, paragrafos.length); j++) {
+                    const sim = calcularSimilaridade(
+                        paragrafos[i].substring(0, 100),
+                        paragrafos[j].substring(0, 100)
+                    );
+                    similaridadeTotal += sim;
+                    pares++;
+                }
+            }
+            
+            return pares > 0 ? similaridadeTotal / pares : 1;
         }
 
         // Função para calcular formalidade
@@ -316,18 +590,20 @@
             let informal = 0;
             
             palavrasFormais.forEach(p => {
-                if (textoLower.includes(p)) formal++;
+                const matches = textoLower.match(new RegExp('\\b' + p + '\\b', 'g'));
+                if (matches) formal += matches.length;
             });
             
             palavrasInformais.forEach(p => {
-                if (textoLower.includes(p)) informal++;
+                const matches = textoLower.match(new RegExp('\\b' + p + '\\b', 'g'));
+                if (matches) informal += matches.length;
             });
             
             const total = tokenizacaoSimples(texto).length;
             return total > 0 ? (formal - informal) / total : 0;
         }
 
-        // Função para detectar IA (versão simplificada sem modelo ML)
+        // Função para detectar IA (versão melhorada)
         function detectarIA(texto) {
             if (!texto || texto.trim().length < 20) {
                 return {
@@ -335,7 +611,8 @@
                     human_probability: 0.5,
                     confidence: 0.1,
                     termos_suspeitos: [],
-                    texto_destacado: texto
+                    texto_destacado: texto,
+                    metricas: {}
                 };
             }
             
@@ -347,18 +624,46 @@
                 // Análise tradicional
                 const features = extrairFeatures(texto);
                 
-                // Heurística baseada em features
-                let probIA = 0.3;
-                if (features.formalidade > 0.1) {
-                    probIA = 0.7;
+                // Cálculo de probabilidade baseado em múltiplos fatores
+                let probIA = 0.3; // Base
+                
+                // Ajustar baseado em formalidade
+                if (features.formalidade > 0.05) {
+                    probIA += features.formalidade * 0.4;
                 }
                 
-                // Ajustar baseado em termos suspeitos
+                // Ajustar baseado em termos suspeitos (com pesos)
                 if (termosSuspeitos.length > 0) {
-                    probIA = Math.min(0.95, probIA + (termosSuspeitos.length * 0.05));
+                    const pesoTotal = termosSuspeitos.reduce((sum, termo) => sum + (termo.peso || 1), 0);
+                    const pesoMedio = pesoTotal / termosSuspeitos.length;
+                    probIA = Math.min(0.95, probIA + (termosSuspeitos.length * pesoMedio * 0.03));
                 }
                 
-                const confianca = 0.6 + (Math.abs(probIA - 0.5) * 0.4);
+                // Ajustar baseado em diversidade lexical (IA tende a ter menor diversidade)
+                if (features.diversidade_lexical < 0.5) {
+                    probIA += (0.5 - features.diversidade_lexical) * 0.3;
+                }
+                
+                // Ajustar baseado em emoção (IA tende a ser mais neutra)
+                if (features.emocao < 0.3) {
+                    probIA += (0.3 - features.emocao) * 0.2;
+                }
+                
+                // Ajustar baseado em estrutura (frases muito longas)
+                if (features.palavras_por_frase > 20) {
+                    probIA += Math.min(0.2, (features.palavras_por_frase - 20) * 0.02);
+                }
+                
+                // Limitar entre 0.05 e 0.95
+                probIA = Math.max(0.05, Math.min(0.95, probIA));
+                
+                // Calcular confiança baseada em múltiplos fatores
+                let confianca = 0.5;
+                confianca += Math.abs(probIA - 0.5) * 0.5; // Mais confiante quando próximo dos extremos
+                confianca += Math.min(0.2, termosSuspeitos.length * 0.05); // Mais termos = mais confiança
+                confianca += Math.min(0.1, features.num_palavras / 1000); // Textos maiores = mais confiança
+                
+                confianca = Math.max(0.3, Math.min(0.95, confianca));
                 
                 // Agrupar termos por tipo para relatório
                 const termosPorTipo = {};
@@ -376,12 +681,14 @@
                     text_analyzed_length: texto.length,
                     termos_suspeitos: termosSuspeitos,
                     texto_destacado: textoDestacado,
+                    metricas: features,
                     estatisticas_deteccao: {
                         total_termos: termosSuspeitos.length,
                         termos_por_tipo: Object.fromEntries(
                             Object.entries(termosPorTipo).map(([tipo, termos]) => [tipo, termos.length])
                         ),
-                        densidade_termos: termosSuspeitos.length / texto.split(/\s+/).length
+                        densidade_termos: termosSuspeitos.length / texto.split(/\s+/).length,
+                        peso_total: termosSuspeitos.reduce((sum, termo) => sum + (termo.peso || 1), 0)
                     }
                 };
                 
@@ -394,7 +701,8 @@
                     human_probability: 0.5,
                     confidence: 0.1,
                     termos_suspeitos: [],
-                    texto_destacado: texto
+                    texto_destacado: texto,
+                    metricas: {}
                 };
             }
         }
@@ -405,8 +713,9 @@
             const chars = text.length;
             const words = text.trim() ? text.trim().split(/\s+/).length : 0;
             const sentences = text.split(/[.!?]+/).length - 1;
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
             document.getElementById('textStats').innerHTML = 
-                `Caracteres: ${chars} | Palavras: ${words} | Frases: ${sentences}`;
+                `Caracteres: ${chars} | Palavras: ${words} | Frases: ${sentences} | Parágrafos: ${paragraphs}`;
         });
 
         async function analyzeText() {
@@ -445,111 +754,4 @@
                     
                     resultDiv.innerHTML = `
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <h3 style="color: ${color}">${veredito}</h3>
-                            <p>🤖 Probabilidade de IA: <strong style="font-size: 1.2em;">${aiProb}%</strong></p>
-                            <p>👤 Probabilidade Humana: <strong style="font-size: 1.2em;">${humanProb}%</strong></p>
-                            <p>📊 Confiança da análise: ${confidence}%</p>
-                        </div>
-                        ${relatorioHTML}
-                    `;
-                } catch (error) {
-                    resultDiv.innerHTML = '<p style="color: red;">❌ Erro na análise. Tente novamente.</p>';
-                } finally {
-                    button.disabled = false;
-                    button.textContent = 'Analisar Texto';
-                }
-            }, 1000);
-        }
-        
-        function gerarRelatorioDetalhado(result) {
-            const termos = result.termos_suspeitos || [];
-            
-            if (termos.length === 0) {
-                return `
-                    <div class="relatorio-termos">
-                        <h4>✅ Nenhum padrão suspeito detectado</h4>
-                        <p>O texto não apresenta os padrões típicos de IA analisados.</p>
-                    </div>
-                `;
-            }
-            
-            // Agrupar termos por tipo
-            const termosPorTipo = {};
-            termos.forEach(termo => {
-                if (!termosPorTipo[termo.tipo]) {
-                    termosPorTipo[termo.tipo] = [];
-                }
-                termosPorTipo[termo.tipo].push(termo);
-            });
-            
-            // Gerar HTML para cada tipo
-            let tiposHTML = '';
-            for (const [tipo, termosTipo] of Object.entries(termosPorTipo)) {
-                let termosHTML = termosTipo.map(termo => `
-                    <div class="termo-item">
-                        <strong>"${termo.termo}"</strong> - ${termo.justificativa}
-                        <br><small>Contexto: "...${termo.contexto}..."</small>
-                    </div>
-                `).join('');
-                
-                const tipoLabel = {
-                    'expressao_formal': 'Expressões Formais',
-                    'conectivo_complexo': 'Conectivos Complexos',
-                    'voz_passiva': 'Voz Passiva',
-                    'superlativo': 'Superlativos'
-                }[tipo] || tipo;
-                
-                tiposHTML += `
-                    <div class="tipo-termo">
-                        <h5>${tipoLabel} (${termosTipo.length} ocorrências)</h5>
-                        ${termosHTML}
-                    </div>
-                `;
-            }
-            
-            return `
-                <div class="relatorio-termos">
-                    <h4>🔍 Relatório de Análise Detalhada</h4>
-                    <p><strong>${termos.length} termos/padrões suspeitos detectados</strong></p>
-                    
-                    <div class="legenda">
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #ef4444;"></div>
-                            <span>Expressões Formais</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #faf5ff; border: 1px solid #8b5cf6;"></div>
-                            <span>Conectivos Complexos</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #ecfeff; border: 1px solid #06b6d4;"></div>
-                            <span>Voz Passiva</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #fffbeb; border: 1px solid #f59e0b;"></div>
-                            <span>Superlativos</span>
-                        </div>
-                    </div>
-                    
-                    <div class="texto-destacado">
-                        <h5>Texto com termos destacados:</h5>
-                        <div>${result.texto_destacado}</div>
-                    </div>
-                    
-                    <div style="margin-top: 20px;">
-                        <h5>📋 Detalhamento dos padrões detectados:</h5>
-                        ${tiposHTML}
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Exemplo de texto para teste
-        document.getElementById('textInput').value = `É importante destacar que a implementação de estratégias eficazes requer uma abordagem sistemática e coordenada. Considerando os fatores mencionados anteriormente, pode-se inferir que a solução proposta apresenta viabilidade técnica e operacional. Observa-se que os resultados obtidos são extremamente significativos e demonstram claramente a eficácia da metodologia empregada.
-
-Por outro lado, quando fui ao mercado hoje, o padeiro foi muito simpático comigo. Ele me deu um café e a gente conversou um pouco sobre o time de futebol. Achei bem legal isso, sabe?`;
-
-        document.getElementById('textInput').dispatchEvent(new Event('input'));
-    </script>
-</body>
-</html>
+                            <h3 style="color: ${color}">${veredito
