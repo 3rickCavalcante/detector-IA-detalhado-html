@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detector de Conteúdo Humano vs IA - Versão Corrigida</title>
+    <title>Detector de Conteúdo Humano vs IA - Versão Final</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -252,6 +252,14 @@
             border-radius: 4px;
         }
         
+        .ai-patterns-list {
+            background-color: #ffebee;
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
         footer {
             text-align: center;
             margin-top: 2rem;
@@ -279,7 +287,7 @@
     <header>
         <div class="container">
             <h1>Detector de Conteúdo Humano vs IA</h1>
-            <p class="subtitle">Sistema com Algoritmo Corrigido para Conteúdo Acadêmico</p>
+            <p class="subtitle">Sistema Balanceado - Detecção Precisa de Conteúdo de IA</p>
         </div>
     </header>
     
@@ -306,6 +314,7 @@
             <div class="test-buttons">
                 <button class="test-btn" onclick="loadSample('academic')">Carregar Artigo Acadêmico (Humano)</button>
                 <button class="test-btn" onclick="loadSample('ai')">Carregar Texto de IA</button>
+                <button class="test-btn" onclick="loadSample('ai2')">Carregar Outro Texto IA</button>
                 <button class="test-btn" onclick="clearText()">Limpar Texto</button>
             </div>
             
@@ -347,13 +356,20 @@
                         <span id="originalityResult" class="detail-value">-</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Padrões de Repetição:</span>
-                        <span id="repetitionResult" class="detail-value">-</span>
+                        <span class="detail-label">Padrões de IA Detectados:</span>
+                        <span id="aiPatternsResult" class="detail-value">-</span>
                     </div>
                     <div class="detail-item">
-                        <span class="detail-label">Elementos Acadêmicos:</span>
-                        <span id="academicElements" class="detail-value">-</span>
+                        <span class="detail-label">Elementos Humanos:</span>
+                        <span id="humanElementsResult" class="detail-value">-</span>
                     </div>
+                </div>
+            </div>
+            
+            <div id="aiPatternsSection" class="ai-patterns-list" style="display: none;">
+                <h3>Padrões de IA Identificados</h3>
+                <div id="aiPatternsList">
+                    <!-- Lista de padrões de IA será inserida aqui -->
                 </div>
             </div>
             
@@ -373,31 +389,31 @@
         </div>
         
         <div class="card">
-            <h2 class="card-title">Sobre o Sistema Corrigido</h2>
+            <h2 class="card-title">Sobre o Sistema Balanceado</h2>
             <div class="confidence-note">
-                <strong>Nota importante:</strong> Esta versão foi ajustada para reconhecer corretamente conteúdo acadêmico humano. 
-                Textos acadêmicos legítimos agora recebem pontuação alta (80%+), evitando falsos positivos.
+                <strong>Nota importante:</strong> Esta versão foi corrigida para detectar adequadamente padrões de IA 
+                enquanto ainda reconhece conteúdo acadêmico humano legítimo.
             </div>
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-title">Abordagem por Presunção de Humanidade</div>
-                    <div class="feature-desc">Assume que textos bem estruturados e complexos são humanos, a menos que haja fortes evidências contrárias.</div>
+                    <div class="feature-title">Detecção Avançada de Padrões de IA</div>
+                    <div class="feature-desc">Identifica frases genéricas, estruturas repetitivas e falta de originalidade típicas de IA.</div>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-title">Foco em Evidências Positivas</div>
-                    <div class="feature-desc">Busca elementos que comprovem autoria humana em vez de penalizar características formais.</div>
+                    <div class="feature-title">Análise de Originalidade</div>
+                    <div class="feature-desc">Verifica a presença de ideias únicas, opiniões pessoais e perspectivas originais.</div>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-title">Reconhecimento de Estilo Acadêmico</div>
-                    <div class="feature-desc">Estrutura formal, citações e terminologia técnica são considerados indicadores de humanidade.</div>
+                    <div class="feature-title">Reconhecimento de Estilo Pessoal</div>
+                    <div class="feature-desc">Busca por marcas de autoria individual como humor, ironia e experiências pessoais.</div>
                 </div>
                 
                 <div class="feature-card">
-                    <div class="feature-title">Tolerância a Repetições Acadêmicas</div>
-                    <div class="feature-desc">Repetição de termos técnicos e conceitos-chave não é penalizada em textos acadêmicos.</div>
+                    <div class="feature-title">Balanceamento Inteligente</div>
+                    <div class="feature-desc">Equilibra a detecção de IA com o reconhecimento de conteúdo acadêmico legítimo.</div>
                 </div>
             </div>
         </div>
@@ -405,8 +421,8 @@
     
     <footer>
         <div class="container">
-            <p>Sistema de Detecção de Conteúdo Humano vs IA - Versão Corrigida para Conteúdo Acadêmico</p>
-            <p>Algoritmo otimizado para evitar falsos positivos em textos acadêmicos humanos</p>
+            <p>Sistema de Detecção de Conteúdo Humano vs IA - Versão Final Balanceada</p>
+            <p>Detecção precisa de conteúdo de IA sem falsos positivos para conteúdo acadêmico humano</p>
         </div>
     </footer>
 
@@ -431,7 +447,15 @@ De acordo com pesquisas recentes, o desenvolvimento da literacia é um processo 
 
 Além disso, é crucial notar que as abordagens pedagógicas devem ser adaptadas às necessidades específicas de cada aluno. A integração de tecnologias educacionais pode potencializar os processos de ensino e aprendizagem.
 
-Em resumo, a promoção de ambientes ricos em literacia é fundamental para o desenvolvimento de competências leitoras e escritoras. A colaboração entre escola, família e comunidade é um aspecto chave nesse processo.`
+Em resumo, a promoção de ambientes ricos em literacia é fundamental para o desenvolvimento de competências leitoras e escritoras. A colaboração entre escola, família e comunidade é um aspecto chave nesse processo.`,
+
+            ai2: `A importância da alfabetização no contexto educacional é inegável. É fundamental compreender que o processo de alfabetização vai além da simples decodificação de letras e sons, envolvendo também a compreensão e produção de textos em situações sociais diversas.
+
+Vale ressaltar que o letramento, por sua vez, refere-se às práticas sociais de leitura e escrita. É crucial considerar que o desenvolvimento das habilidades de literacia ocorre de maneira gradual e contínua, demandando intervenções pedagógicas adequadas em cada etapa.
+
+Além disso, é pertinente destacar que a integração entre teoria e prática é essencial para o sucesso do processo educativo. A utilização de metodologias diversificadas e a criação de ambientes estimulantes contribuem significativamente para a aquisição e consolidação das competências leitoras e escritoras.
+
+Em síntese, a articulação entre alfabetização e letramento constitui-se como um pilar fundamental para a formação de cidadãos críticos e participativos na sociedade contemporânea.`
         };
 
         function loadSample(type) {
@@ -469,56 +493,44 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
         });
         
         function analyzeText(text, contentType) {
-            // Nova abordagem: Presunção de humanidade para textos bem estruturados
-            let humanScore = 75; // Base muito mais alta - assume humano até prova contrária
-            
-            // Bônus por tipo de conteúdo
-            const contentBonuses = {
-                'academic': 15,
-                'creative': 10,
-                'journalistic': 5,
-                'technical': 12,
-                'conversational': 0,
-                'general': 0
-            };
-            
-            humanScore += contentBonuses[contentType] || 0;
+            // Abordagem balanceada - não assume nada inicialmente
+            let humanScore = 50; // Ponto neutro
             
             // Análise básica do texto
             const wordCount = text.split(/\s+/).length;
             const sentenceCount = text.split(/[.!?]+/).length - 1;
             const paragraphCount = text.split(/\n\s*\n/).length;
             
-            // Bônus por complexidade (textos longos e complexos tendem a ser humanos)
-            if (wordCount > 200) humanScore += 5;
-            if (sentenceCount > 15) humanScore += 3;
-            
-            // Análise de complexidade linguística
-            const avgSentenceLength = wordCount / Math.max(sentenceCount, 1);
-            if (avgSentenceLength > 15) humanScore += 5;
-            
-            // DETECÇÃO DE ELEMENTOS HUMANOS (foco principal)
-            const humanElements = detectHumanElements(text);
-            humanScore += humanElements * 8; // Bônus significativo
-            
-            // Elementos acadêmicos (forte indicador de humanidade)
-            const academicElements = detectAcademicElements(text);
-            humanScore += academicElements * 10; // Bônus muito alto
-            
-            // Estrutura argumentativa
-            const argumentStructure = analyzeArgumentStructure(text);
-            humanScore += argumentStructure * 6;
-            
-            // DETECÇÃO DE PADRÕES DE IA (apenas penaliza se for muito evidente)
+            // 1. DETECÇÃO DE PADRÕES DE IA (FORTE)
             const aiPatterns = detectAIPatterns(text);
-            humanScore -= Math.min(aiPatterns * 5, 20); // Penalidade moderada
+            humanScore -= aiPatterns.score * 3; // Penalidade forte para padrões de IA
             
-            // Repetições (apenas penaliza repetições excessivas e não acadêmicas)
-            const problematicRepetitions = detectProblematicRepetitions(text, contentType);
-            humanScore -= Math.min(problematicRepetitions * 2, 10); // Penalidade mínima
+            // 2. ELEMENTOS HUMANOS (FORTE)
+            const humanElements = detectHumanElements(text);
+            humanScore += humanElements * 4; // Bônus forte para elementos humanos
             
-            // Limitar a pontuação entre 10 e 98 (nunca 100% nem 0% por segurança)
-            humanScore = Math.max(10, Math.min(98, humanScore));
+            // 3. ESTRUTURA E COMPLEXIDADE (MODERADO)
+            const structureAnalysis = analyzeStructureAndComplexity(text);
+            humanScore += structureAnalysis.score;
+            
+            // 4. ELEMENTOS ACADÊMICOS (MODERADO - apenas para textos acadêmicos)
+            let academicBonus = 0;
+            if (contentType === 'academic') {
+                const academicElements = detectAcademicElements(text);
+                academicBonus = academicElements * 3;
+                humanScore += academicBonus;
+            }
+            
+            // 5. ORIGINALIDADE E DIVERSIDADE LINGUÍSTICA (MODERADO)
+            const originalityScore = analyzeOriginality(text);
+            humanScore += originalityScore;
+            
+            // 6. BÔNUS/PENALIDADE POR TIPO DE CONTEÚDO (LEVE)
+            const contentAdjustment = getContentTypeAdjustment(contentType, text);
+            humanScore += contentAdjustment;
+            
+            // Limitar a pontuação entre 5 e 95
+            humanScore = Math.max(5, Math.min(95, humanScore));
             
             return {
                 humanProbability: Math.round(humanScore),
@@ -527,15 +539,109 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
                 wordCount: wordCount,
                 sentenceCount: sentenceCount,
                 paragraphCount: paragraphCount,
-                repeatedPhrases: problematicRepetitions,
                 aiPatterns: aiPatterns,
                 humanElements: humanElements,
-                academicElements: academicElements,
-                argumentStructure: argumentStructure,
-                complexity: avgSentenceLength > 20 ? 'Alta' : avgSentenceLength > 12 ? 'Média' : 'Baixa',
-                coherence: humanScore > 70 ? 'Alta' : humanScore > 50 ? 'Média' : 'Baixa',
-                originality: humanElements > 2 ? 'Alta' : humanElements > 1 ? 'Média' : 'Baixa'
+                structureScore: structureAnalysis.score,
+                academicBonus: academicBonus,
+                originalityScore: originalityScore,
+                complexity: structureAnalysis.complexity,
+                coherence: structureAnalysis.coherence,
+                originality: originalityScore > 3 ? 'Alta' : originalityScore > 1 ? 'Média' : 'Baixa'
             };
+        }
+        
+        function detectAIPatterns(text) {
+            // Padrões específicos e genéricos de IA
+            const patterns = {
+                // Padrões muito específicos de IA
+                explicitAI: [
+                    /como um (modelo de )?IA/gi,
+                    /como uma inteligência artificial/gi,
+                    /não tenho (opiniões|emoções|sentimentos) pessoais/gi,
+                    /baseado (exclusivamente|apenas) no meu treinamento/gi,
+                    /como (um|uma) (assistente|modelo) de linguagem/gi,
+                    /não possuo (consciência|experiências|memórias)/gi,
+                    /minhas respostas são baseadas/gi,
+                    /fui treinado|fui programado/gi
+                ],
+                
+                // Padrões genéricos muito comuns em IA
+                genericPhrases: [
+                    /é importante (ressaltar|destacar|notar)/gi,
+                    /vale (ressaltar|destacar|mencionar)/gi,
+                    /além disso,/gi,
+                    /dessa forma,/gi,
+                    /em resumo,/gi,
+                    /em síntese,/gi,
+                    /em conclusão,/gi,
+                    /por outro lado,/gi,
+                    /é fundamental (entender|compreender)/gi,
+                    /é crucial (considerar|notar)/gi,
+                    /é essencial (mencionar|destacar)/gi,
+                    /constitui-se como/gi,
+                    /configura-se como/gi,
+                    /pode-se afirmar que/gi
+                ],
+                
+                // Estruturas repetitivas
+                repetitiveStructures: [
+                    /\.\s*Além disso,\s*[A-Z]/g,
+                    /\.\s*É importante\s*[A-Z]/g,
+                    /\.\s*Vale ressaltar\s*[A-Z]/g,
+                    /\.\s*Portanto,\s*[A-Z]/g
+                ]
+            };
+            
+            let score = 0;
+            const detectedPatterns = [];
+            
+            // Verificar padrões explícitos de IA
+            patterns.explicitAI.forEach((pattern, index) => {
+                const matches = text.match(pattern);
+                if (matches) {
+                    score += matches.length * 3;
+                    detectedPatterns.push(`Padrão explícito de IA: "${matches[0]}"`);
+                }
+            });
+            
+            // Verificar frases genéricas (limitar o impacto)
+            let genericCount = 0;
+            patterns.genericPhrases.forEach(pattern => {
+                const matches = text.match(pattern);
+                if (matches) genericCount += matches.length;
+            });
+            
+            if (genericCount > 2) {
+                score += Math.min(genericCount - 2, 5);
+                detectedPatterns.push(`${genericCount} frases genéricas típicas de IA`);
+            }
+            
+            // Verificar estruturas repetitivas
+            patterns.repetitiveStructures.forEach(pattern => {
+                const matches = text.match(pattern);
+                if (matches && matches.length > 1) {
+                    score += matches.length * 2;
+                    detectedPatterns.push(`Estrutura repetitiva: inícios de frase similares`);
+                }
+            });
+            
+            // Penalidade por falta de diversidade vocabular
+            const vocabDiversity = calculateVocabDiversity(text);
+            if (vocabDiversity < 0.4) {
+                score += 3;
+                detectedPatterns.push(`Baixa diversidade vocabular (${Math.round(vocabDiversity * 100)}%)`);
+            }
+            
+            return {
+                score: Math.min(score, 15), // Limitar o impacto máximo
+                patterns: detectedPatterns
+            };
+        }
+        
+        function calculateVocabDiversity(text) {
+            const words = text.toLowerCase().split(/\s+/).filter(word => word.length > 3);
+            const uniqueWords = new Set(words);
+            return uniqueWords.size / words.length;
         }
         
         function detectHumanElements(text) {
@@ -547,14 +653,15 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
                 /opiniões? (pessoais|subjetivas)/gi,
                 /experiências? pessoais?/gi,
                 /(minha|nossa) (experiência|vivência)/gi,
-                /(acredito|penso|considero) que/gi,
+                /(acredito|penso|considero|acho) que/gi,
                 /(percebi|notei|observei) que/gi,
                 /críticas? (pessoais|específicas)/gi,
                 /reflexões? pessoais?/gi,
-                /exemplos? (concretos|específicos)/gi,
+                /exemplos? (concretos|específicos|pessoais)/gi,
                 /contradições? (explícitas|intencionais)/gi,
                 /vozes? (ativas|pessoais)/gi,
-                /(enfatizo|destaco|saliento)/gi
+                /(enfatizo|destaco|saliento) que/gi,
+                /na minha (visão|perspectiva|opinião)/gi
             ];
             
             let humanCount = 0;
@@ -563,11 +670,49 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
                 if (matches) humanCount += matches.length;
             });
             
-            return Math.min(humanCount, 5);
+            return Math.min(humanCount, 8);
+        }
+        
+        function analyzeStructureAndComplexity(text) {
+            let score = 0;
+            
+            // Análise de complexidade
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const avgSentenceLength = text.split(/\s+/).length / Math.max(sentences.length, 1);
+            
+            // Bônus por sentenças complexas
+            let complexSentences = 0;
+            sentences.forEach(sentence => {
+                const words = sentence.trim().split(/\s+/);
+                if (words.length > 18 && 
+                   (sentence.includes(',') || sentence.includes(';') || 
+                    sentence.includes(':') || sentence.includes('—'))) {
+                    complexSentences++;
+                }
+            });
+            
+            score += Math.min(complexSentences, 4);
+            
+            // Bônus por variação no tamanho das sentenças
+            const sentenceLengths = sentences.map(s => s.split(/\s+/).length);
+            const lengthVariance = calculateVariance(sentenceLengths);
+            if (lengthVariance > 20) score += 2;
+            
+            return {
+                score: score,
+                complexity: avgSentenceLength > 20 ? 'Alta' : avgSentenceLength > 12 ? 'Média' : 'Baixa',
+                coherence: score > 3 ? 'Alta' : score > 1 ? 'Média' : 'Baixa'
+            };
+        }
+        
+        function calculateVariance(numbers) {
+            if (numbers.length === 0) return 0;
+            const mean = numbers.reduce((a, b) => a + b) / numbers.length;
+            return numbers.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / numbers.length;
         }
         
         function detectAcademicElements(text) {
-            // Elementos que indicam texto acadêmico humano genuíno
+            // Elementos que indicam texto acadêmico genuíno
             const academicIndicators = [
                 /resumo:/gi,
                 /abstract/gi,
@@ -581,11 +726,11 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
                 /bibliografia/gi,
                 /citações?/gi,
                 /autor\(?es\)?/gi,
-                /\[[\d]+\]/g, // Citações numéricas [1], [2]
-                /\([A-Za-z]+, \d{4}\)/g, // Citações (Autor, Ano)
-                /p\. \d+/gi, // Referências a páginas
-                /(conforme|segundo) [A-Z]/g, // Citações de autores
-                /(ibidem|idem|op\. cit)/gi // Termos acadêmicos
+                /\[[\d]+\]/g,
+                /\([A-Za-z]+, \d{4}\)/g,
+                /p\. \d+/gi,
+                /(conforme|segundo) [A-Z][a-z]+/g,
+                /(ibidem|idem|op\. cit)/gi
             ];
             
             let academicCount = 0;
@@ -597,77 +742,39 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
             return Math.min(academicCount, 5);
         }
         
-        function detectAIPatterns(text) {
-            // Padrões muito específicos de IA - apenas os mais óbvios
-            const strongAIIndicators = [
-                /como um (modelo de )?IA/gi,
-                /como uma inteligência artificial/gi,
-                /não tenho (opiniões|emoções) pessoais/gi,
-                /baseado (exclusivamente|apenas) no meu treinamento/gi,
-                /como (um|uma) (assistente|modelo) de linguagem/gi,
-                /não possuo (consciência|experiências)/gi
+        function analyzeOriginality(text) {
+            let score = 0;
+            
+            // Verificar presença de ideias únicas
+            const uniqueIdeas = [
+                /(inovador|original|criativo)/gi,
+                /(sugiro|proponho|recomendo)/gi,
+                /(diferentemente|ao contrário) de/gi,
+                /(surpreendentemente|curiosamente)/gi
             ];
             
-            let patternCount = 0;
-            strongAIIndicators.forEach(pattern => {
-                const matches = text.match(pattern);
-                if (matches) patternCount += matches.length;
+            uniqueIdeas.forEach(pattern => {
+                if (text.match(pattern)) score += 1;
             });
             
-            return patternCount;
+            // Bônus por perguntas retóricas
+            const rhetoricalQuestions = (text.match(/\?/g) || []).length;
+            score += Math.min(rhetoricalQuestions, 2);
+            
+            return score;
         }
         
-        function detectProblematicRepetitions(text, contentType) {
-            // Apenas detecta repetições realmente problemáticas
-            const words = text.toLowerCase().split(/\s+/);
-            const phraseMap = {};
-            let problematicCount = 0;
+        function getContentTypeAdjustment(contentType, text) {
+            const adjustments = {
+                'academic': 2,
+                'creative': 3,
+                'journalistic': 1,
+                'technical': 2,
+                'conversational': -1,
+                'general': 0
+            };
             
-            // Ignorar completamente repetições em textos acadêmicos
-            if (contentType === 'academic') return 0;
-            
-            for (let i = 0; i < words.length - 3; i++) {
-                const phrase = words.slice(i, i + 4).join(' ');
-                
-                phraseMap[phrase] = (phraseMap[phrase] || 0) + 1;
-                
-                // Só considera problemático se repetir a mesma frase 4+ palavras mais de 3 vezes
-                if (phraseMap[phrase] > 3) {
-                    problematicCount++;
-                }
-            }
-            
-            return Math.min(problematicCount, 5);
-        }
-        
-        function analyzeArgumentStructure(text) {
-            // Analisa a qualidade da estrutura argumentativa
-            let structureScore = 0;
-            
-            // Desenvolvimento de ideias complexas
-            const sentences = text.split(/[.!?]+/);
-            let complexSentences = 0;
-            
-            sentences.forEach(sentence => {
-                const words = sentence.trim().split(/\s+/);
-                // Frases complexas têm mais de 15 palavras e usam conectivos
-                if (words.length > 15 && 
-                   (sentence.includes(',') || sentence.includes(';') || 
-                    sentence.includes('no entanto') || sentence.includes('portanto'))) {
-                    complexSentences++;
-                }
-            });
-            
-            structureScore += Math.min(complexSentences, 3);
-            
-            // Elementos de estruturação argumentativa
-            if (text.includes('por um lado') && text.includes('por outro lado')) structureScore += 2;
-            if ((text.match(/no entanto|contudo|entretanto/gi) || []).length > 1) structureScore += 1;
-            if ((text.match(/portanto|consequentemente|assim|dessa forma/gi) || []).length > 1) structureScore += 1;
-            if (text.includes('primeiramente') || text.includes('em primeiro lugar')) structureScore += 1;
-            if (text.includes('finalmente') || text.includes('em conclusão')) structureScore += 1;
-            
-            return Math.min(structureScore, 5);
+            return adjustments[contentType] || 0;
         }
         
         function displayResults(result) {
@@ -682,9 +789,9 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
             probabilityText.textContent = `${result.humanProbability}%`;
             
             // Ajustar cor baseada na probabilidade
-            if (result.humanProbability >= 80) {
+            if (result.humanProbability >= 70) {
                 probabilityFill.style.backgroundColor = 'var(--success)';
-            } else if (result.humanProbability >= 60) {
+            } else if (result.humanProbability >= 40) {
                 probabilityFill.style.backgroundColor = 'var(--warning)';
             } else {
                 probabilityFill.style.backgroundColor = 'var(--danger)';
@@ -692,12 +799,12 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
             
             // Exibir veredito
             const verdict = document.getElementById('verdict');
-            if (result.humanProbability >= 80) {
-                verdict.innerHTML = '<span class="human-indicator">✓ Alto índice de conteúdo humano</span>';
-            } else if (result.humanProbability >= 60) {
-                verdict.innerHTML = '<span style="color: var(--warning)">⚠️ Provável conteúdo humano</span>';
+            if (result.humanProbability >= 70) {
+                verdict.innerHTML = '<span class="human-indicator">✓ Provável conteúdo humano</span>';
+            } else if (result.humanProbability >= 40) {
+                verdict.innerHTML = '<span style="color: var(--warning)">⚠️ Resultado misto</span>';
             } else {
-                verdict.innerHTML = '<span class="ai-indicator">✗ Possível conteúdo de IA</span>';
+                verdict.innerHTML = '<span class="ai-indicator">✗ Provável conteúdo de IA</span>';
             }
             
             // Atualizar detalhes da análise
@@ -706,10 +813,29 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
             document.getElementById('complexityResult').textContent = result.complexity;
             document.getElementById('coherenceResult').textContent = result.coherence;
             document.getElementById('originalityResult').textContent = result.originality;
-            document.getElementById('repetitionResult').textContent = 
-                result.repeatedPhrases > 2 ? 'Moderada' : result.repeatedPhrases > 0 ? 'Baixa' : 'Mínima';
-            document.getElementById('academicElements').textContent = 
-                result.academicElements > 3 ? 'Alta' : result.academicElements > 1 ? 'Média' : 'Baixa';
+            document.getElementById('aiPatternsResult').textContent = 
+                result.aiPatterns.score > 5 ? 'Alta' : result.aiPatterns.score > 2 ? 'Média' : 'Baixa';
+            document.getElementById('humanElementsResult').textContent = 
+                result.humanElements > 3 ? 'Alta' : result.humanElements > 1 ? 'Média' : 'Baixa';
+            
+            // Mostrar padrões de IA detectados se houver
+            const aiPatternsSection = document.getElementById('aiPatternsSection');
+            const aiPatternsList = document.getElementById('aiPatternsList');
+            
+            if (result.aiPatterns.patterns.length > 0) {
+                aiPatternsSection.style.display = 'block';
+                aiPatternsList.innerHTML = '';
+                
+                result.aiPatterns.patterns.forEach(pattern => {
+                    const patternItem = document.createElement('div');
+                    patternItem.style.padding = '0.5rem 0';
+                    patternItem.style.borderBottom = '1px solid #ffcdd2';
+                    patternItem.textContent = `• ${pattern}`;
+                    aiPatternsList.appendChild(patternItem);
+                });
+            } else {
+                aiPatternsSection.style.display = 'none';
+            }
             
             // Gerar características identificadas
             const featuresList = document.getElementById('featuresList');
@@ -727,15 +853,14 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
                           'Poucos elementos humanos explícitos'
                 },
                 {
-                    title: 'Elementos Acadêmicos',
-                    desc: result.academicElements > 0 ?
-                          `${result.academicElements} elementos acadêmicos identificados` :
-                          'Poucos elementos acadêmicos formais'
+                    title: 'Complexidade',
+                    desc: result.complexity === 'Alta' ? 'Linguagem complexa e elaborada' :
+                          result.complexity === 'Média' ? 'Complexidade moderada' : 'Linguagem simples'
                 },
                 {
-                    title: 'Estrutura Argumentativa',
-                    desc: result.argumentStructure > 2 ? 'Bem estruturado' :
-                          result.argumentStructure > 1 ? 'Estrutura moderada' : 'Estrutura básica'
+                    title: 'Originalidade',
+                    desc: result.originality === 'Alta' ? 'Ideias originais presentes' :
+                          result.originality === 'Média' ? 'Alguma originalidade' : 'Pouca originalidade detectada'
                 }
             ];
             
@@ -753,47 +878,53 @@ Em resumo, a promoção de ambientes ricos em literacia é fundamental para o de
             const recommendations = document.getElementById('recommendations');
             let recHTML = '';
             
-            if (result.humanProbability >= 80) {
+            if (result.humanProbability >= 70) {
                 recHTML += `
                     <div class="feature-card">
                         <div class="feature-title">Texto Classificado como Humano</div>
                         <div class="feature-desc">
-                            O texto apresenta fortes indícios de autoria humana, com ${result.humanProbability}% de probabilidade.
-                            ${result.contentType === 'academic' ? 'A estrutura acadêmica foi um fator determinante.' : ''}
+                            O texto apresenta fortes indícios de autoria humana (${result.humanProbability}%).
+                            ${result.contentType === 'academic' ? 'A estrutura acadêmica contribuiu para esta classificação.' : ''}
                         </div>
                     </div>
                 `;
-            } else if (result.contentType === 'academic' && result.humanProbability < 80) {
+            } else if (result.humanProbability <= 30) {
                 recHTML += `
                     <div class="feature-card">
-                        <div class="feature-title">Atenção: Possível Subestimação</div>
+                        <div class="feature-title">Alto Índice de Conteúdo de IA</div>
                         <div class="feature-desc">
-                            Textos acadêmicos legítimos podem ser subestimados. Considere a fonte e o contexto.
-                            Este texto tem ${result.academicElements} elementos acadêmicos identificados.
+                            Foram detectados ${result.aiPatterns.patterns.length} padrões típicos de IA.
+                            Considere revisar o texto para incluir mais elementos pessoais e originais.
+                        </div>
+                    </div>
+                `;
+            } else {
+                recHTML += `
+                    <div class="feature-card">
+                        <div class="feature-title">Resultado Inconclusivo</div>
+                        <div class="feature-desc">
+                            O texto apresenta características mistas (${result.humanProbability}% humano).
+                            ${result.aiPatterns.patterns.length > 0 ? 
+                              `Foram detectados ${result.aiPatterns.patterns.length} padrões de IA.` : 
+                              'Poucos elementos humanos explícitos foram identificados.'}
                         </div>
                     </div>
                 `;
             }
             
-            if (result.humanElements < 2 && result.contentType !== 'academic') {
+            if (result.humanElements < 2) {
                 recHTML += `
                     <div class="feature-card">
-                        <div class="feature-title">Sugestão para Textos Não-Acadêmicos</div>
+                        <div class="feature-title">Sugestão de Melhoria</div>
                         <div class="feature-desc">
-                            Para aumentar a autenticidade, inclua mais opiniões pessoais, experiências ou reflexões subjetivas.
+                            Para aumentar a autenticidade, inclua mais opiniões pessoais, 
+                            experiências ou reflexões subjetivas.
                         </div>
                     </div>
                 `;
             }
             
-            recommendations.innerHTML = recHTML || `
-                <div class="feature-card">
-                    <div class="feature-title">Análise Concluída</div>
-                    <div class="feature-desc">
-                        O texto foi analisado com sucesso. Considere o resultado no contexto adequado.
-                    </div>
-                </div>
-            `;
+            recommendations.innerHTML = recHTML;
             
             // Rolagem suave para os resultados
             document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
