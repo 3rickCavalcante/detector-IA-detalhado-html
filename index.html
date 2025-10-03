@@ -215,14 +215,6 @@
             ]
         };
 
-        // Palavras e expressões tipicamente humanas
-        const padroesHumanos = [
-            'tipo', 'assim', 'ok', 'bem', 'acho', 'tá', 'né', 'uai', 'oxente',
-            'caramba', 'poxa', 'nossa', 'aff', 'puts', 'mano', 'cara', 'velho',
-            'tipo assim', 'sei lá', 'de repente', 'do nada', 'na moral',
-            'fui lá', 'daí', 'aí', 'então', 'sabe', 'tá ligado', 'cê acredita'
-        ];
-
         // Função para tokenizar texto
         function tokenizacaoSimples(texto) {
             const palavras = texto.match(/\b\w+\b/g);
@@ -258,54 +250,11 @@
                             justificativa: 'Frase repetida exatamente',
                             posicao: [i, j]
                         });
-                    } else if (frasesSimplificadas[i] && frasesSimplificadas[j] &&
-                             calcularSimilaridade(frasesSimplificadas[i], frasesSimplificadas[j]) > 0.8) {
-                        repeticoes.push({
-                            frase: frases[i],
-                            tipo: 'repeticao',
-                            justificativa: 'Frase muito similar detectada',
-                            posicao: [i, j]
-                        });
                     }
                 }
             }
             
             return repeticoes;
-        }
-
-        // Função para calcular similaridade entre strings
-        function calcularSimilaridade(str1, str2) {
-            const longer = str1.length > str2.length ? str1 : str2;
-            const shorter = str1.length > str2.length ? str2 : str1;
-            
-            if (longer.length === 0) return 1.0;
-            
-            return (longer.length - calcularDistanciaEdicao(longer, shorter)) / parseFloat(longer.length);
-        }
-
-        // Função para calcular distância de edição (Levenshtein)
-        function calcularDistanciaEdicao(s1, s2) {
-            s1 = s1.toLowerCase();
-            s2 = s2.toLowerCase();
-            
-            const costs = [];
-            for (let i = 0; i <= s1.length; i++) {
-                let lastValue = i;
-                for (let j = 0; j <= s2.length; j++) {
-                    if (i === 0) {
-                        costs[j] = j;
-                    } else if (j > 0) {
-                        let newValue = costs[j - 1];
-                        if (s1.charAt(i - 1) !== s2.charAt(j - 1)) {
-                            newValue = Math.min(Math.min(newValue, lastValue), costs[j]) + 1;
-                        }
-                        costs[j - 1] = lastValue;
-                        lastValue = newValue;
-                    }
-                }
-                if (i > 0) costs[s2.length] = lastValue;
-            }
-            return costs[s2.length];
         }
 
         // Função para analisar estrutura complexa
@@ -554,30 +503,8 @@
                 palavras.filter(p => p.length > 6).length / palavras.length : 0;
             features.formalidade = calcularFormalidade(textoAnalise);
             features.emocao = analisarEmocao(textoAnalise);
-            features.coesao = calcularCoesao(paragrafos);
             
             return features;
-        }
-
-        // Função para calcular coesão entre parágrafos
-        function calcularCoesao(paragrafos) {
-            if (paragrafos.length <= 1) return 1;
-            
-            let similaridadeTotal = 0;
-            let pares = 0;
-            
-            for (let i = 0; i < paragrafos.length - 1; i++) {
-                for (let j = i + 1; j < Math.min(i + 3, paragrafos.length); j++) {
-                    const sim = calcularSimilaridade(
-                        paragrafos[i].substring(0, 100),
-                        paragrafos[j].substring(0, 100)
-                    );
-                    similaridadeTotal += sim;
-                    pares++;
-                }
-            }
-            
-            return pares > 0 ? similaridadeTotal / pares : 1;
         }
 
         // Função para calcular formalidade
@@ -718,7 +645,7 @@
                 `Caracteres: ${chars} | Palavras: ${words} | Frases: ${sentences} | Parágrafos: ${paragraphs}`;
         });
 
-        async function analyzeText() {
+        function analyzeText() {
             const text = document.getElementById('textInput').value.trim();
             const resultDiv = document.getElementById('result');
             const button = document.getElementById('analyzeBtn');
@@ -754,4 +681,91 @@
                     
                     resultDiv.innerHTML = `
                         <div style="text-align: center; margin-bottom: 20px;">
-                            <h3 style="color: ${color}">${veredito
+                            <h3 style="color: ${color}">${veredito}</h3>
+                            <p>🤖 Probabilidade de IA: <strong style="font-size: 1.2em;">${aiProb}%</strong></p>
+                            <p>👤 Probabilidade Humana: <strong style="font-size: 1.2em;">${humanProb}%</strong></p>
+                            <p>📊 Confiança da análise: ${confidence}%</p>
+                        </div>
+                        ${relatorioHTML}
+                    `;
+                } catch (error) {
+                    console.error("Erro:", error);
+                    resultDiv.innerHTML = '<p style="color: red;">❌ Erro na análise. Tente novamente.</p>';
+                } finally {
+                    button.disabled = false;
+                    button.textContent = 'Analisar Texto';
+                }
+            }, 1000);
+        }
+        
+        function gerarRelatorioDetalhado(result) {
+            const termos = result.termos_suspeitos || [];
+            
+            if (termos.length === 0) {
+                return `
+                    <div class="relatorio-termos">
+                        <h4>✅ Nenhum padrão suspeito detectado</h4>
+                        <p>O texto não apresenta os padrões típicos de IA analisados.</p>
+                    </div>
+                `;
+            }
+            
+            // Agrupar termos por tipo
+            const termosPorTipo = {};
+            termos.forEach(termo => {
+                if (!termosPorTipo[termo.tipo]) {
+                    termosPorTipo[termo.tipo] = [];
+                }
+                termosPorTipo[termo.tipo].push(termo);
+            });
+            
+            // Gerar HTML para cada tipo
+            let tiposHTML = '';
+            for (const [tipo, termosTipo] of Object.entries(termosPorTipo)) {
+                let termosHTML = termosTipo.map(termo => `
+                    <div class="termo-item">
+                        <strong>"${termo.termo}"</strong> - ${termo.justificativa}
+                        <br><small>Contexto: "...${termo.contexto}..."</small>
+                    </div>
+                `).join('');
+                
+                const tipoLabel = {
+                    'expressao_formal': 'Expressões Formais',
+                    'conectivo_complexo': 'Conectivos Complexos',
+                    'voz_passiva': 'Voz Passiva',
+                    'superlativo': 'Superlativos',
+                    'repeticao': 'Repetições',
+                    'estrutura_complexa': 'Estruturas Complexas'
+                }[tipo] || tipo;
+                
+                tiposHTML += `
+                    <div class="tipo-termo">
+                        <h5>${tipoLabel} (${termosTipo.length} ocorrências)</h5>
+                        ${termosHTML}
+                    </div>
+                `;
+            }
+            
+            // Gerar métricas
+            let metricasHTML = '';
+            if (result.metricas) {
+                const metricas = result.metricas;
+                metricasHTML = `
+                    <div class="metricas">
+                        <div class="metrica-card">
+                            <div>Diversidade Lexical</div>
+                            <div class="metrica-valor" style="color: ${metricas.diversidade_lexical > 0.6 ? '#10b981' : '#ef4444'}">
+                                ${Math.round(metricas.diversidade_lexical * 100)}%
+                            </div>
+                            <small>${metricas.diversidade_lexical > 0.6 ? 'Alta diversidade' : 'Baixa diversidade'}</small>
+                        </div>
+                        <div class="metrica-card">
+                            <div>Formalidade</div>
+                            <div class="metrica-valor" style="color: ${metricas.formalidade > 0.1 ? '#ef4444' : '#10b981'}">
+                                ${Math.round(metricas.formalidade * 100)}%
+                            </div>
+                            <small>${metricas.formalidade > 0.1 ? 'Muito formal' : 'Pouco formal'}</small>
+                        </div>
+                        <div class="metrica-card">
+                            <div>Emoção</div>
+                            <div class="metrica-valor" style="color: ${metricas.emocao > 0.5 ? '#10b981' : '#64748b'}">
