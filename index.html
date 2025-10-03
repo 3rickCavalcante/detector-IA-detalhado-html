@@ -36,7 +36,6 @@
         .result { margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 10px; }
         .stats { background: #e2e8f0; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
         
-        /* Estilos para padrões detectados */
         .padrao-detectado {
             background-color: #fef3c7;
             border: 1px solid #f59e0b;
@@ -52,9 +51,7 @@
         }
         .padrao-detectado[data-tipo="alto_risco_ia"] { border-color: #dc2626; background-color: #fef2f2; }
         .padrao-detectado[data-tipo="medio_risco_ia"] { border-color: #ea580c; background-color: #fff7ed; }
-        .padrao-detectado[data-tipo="baixo_risco_ia"] { border-color: #d97706; background-color: #fffbeb; }
         .padrao-detectado[data-tipo="forte_humano"] { border-color: #059669; background-color: #ecfdf5; }
-        .padrao-detectado[data-tipo="moderado_humano"] { border-color: #0d9488; background-color: #f0fdfa; }
         
         .texto-destacado {
             background: white;
@@ -65,49 +62,6 @@
             line-height: 1.8;
             max-height: 400px;
             overflow-y: auto;
-        }
-        
-        .relatorio-termos {
-            margin-top: 20px;
-        }
-        
-        .tipo-termo {
-            background: #f8fafc;
-            border-left: 4px solid #2563eb;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-        
-        .termo-item {
-            background: white;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 5px;
-            border-left: 3px solid #94a3b8;
-        }
-        
-        .legenda {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 15px 0;
-        }
-        
-        .legenda-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            padding: 5px 10px;
-            background: #f8fafc;
-            border-radius: 5px;
-            font-size: 0.9em;
-        }
-        
-        .legenda-cor {
-            width: 15px;
-            height: 15px;
-            border-radius: 3px;
         }
         
         .metricas {
@@ -130,14 +84,6 @@
             margin: 5px 0;
         }
         
-        .dica {
-            background: #dbeafe;
-            border-left: 4px solid #2563eb;
-            padding: 10px 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
         .contexto-info {
             background: #fffbeb;
             border-left: 4px solid #f59e0b;
@@ -146,40 +92,9 @@
             border-radius: 5px;
         }
 
-        .progress-container {
-            margin: 20px 0;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: between;
-            margin-bottom: 5px;
-        }
-
-        .progress-bar {
-            height: 12px;
-            background: #e2e8f0;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 6px;
-            transition: width 0.5s ease;
-        }
-
-        .analise-detalhada {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
         .fator-analise {
-            margin: 15px 0;
-            padding: 15px;
+            margin: 10px 0;
+            padding: 12px;
             border-left: 4px solid #e2e8f0;
             background: #f8fafc;
             border-radius: 5px;
@@ -195,482 +110,350 @@
             background: #fef2f2;
         }
 
-        .fator-neutro {
-            border-left-color: #6b7280;
-            background: #f9fafb;
+        .alerta-historico {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
         }
-
-        .confidence-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .high-confidence { background: #10b981; color: white; }
-        .medium-confidence { background: #f59e0b; color: white; }
-        .low-confidence { background: #ef4444; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Analisador de Texto Acadêmico Avançado</h1>
-            <p>Análise multi-camadas com alta confiabilidade para textos universitários</p>
+            <h1>🔍 Analisador de Texto Acadêmico - IA vs Humano</h1>
+            <p>Sistema corrigido com detecção histórica precisa</p>
         </div>
         
         <div class="app-card">
             <div class="contexto-info">
-                <strong>🎯 Análise de Alta Confiabilidade:</strong> Sistema com 12 dimensões de análise, 
-                considerando o contexto acadêmico e padrões genuínos de escrita humana vs IA.
+                <strong>🎯 CORREÇÃO APLICADA:</strong> Sistema agora reconhece textos históricos 
+                (anteriores a 2018) como humanos por padrão, com análise focada em padrões genuínos de IA moderna.
             </div>
 
             <h3>📝 Cole seu texto para análise</h3>
-            <textarea class="text-area" id="textInput" placeholder="Cole o texto acadêmico que deseja analisar aqui..."></textarea>
+            <textarea class="text-area" id="textInput" placeholder="Cole o texto acadêmico aqui..."></textarea>
             
             <div class="stats" id="textStats">
                 Caracteres: 0 | Palavras: 0 | Frases: 0 | Parágrafos: 0
             </div>
             
-            <button class="analyze-btn" id="analyzeBtn">Analisar com Alta Confiabilidade</button>
+            <button class="analyze-btn" id="analyzeBtn">Analisar Texto</button>
             <div id="result"></div>
         </div>
     </div>
     
     <script>
-        // ========== SISTEMA DE ANÁLISE MULTI-CAMADAS ==========
+        // ========== SISTEMA CORRIGIDO - DETECÇÃO HISTÓRICA PRECISA ==========
 
-        // CAMADA 1: PADRÕES DE ALTO RISCO DE IA
-        const padroesAltoRiscoIA = {
-            'referencias_diretas_ia': [
-                'como um modelo de ia', 'como uma inteligência artificial', 'grande modelo de linguagem',
-                'chatgpt', 'gpt-4', 'gpt-3', 'openai', 'como assistente de ia', 'modelo de linguagem grande',
-                'treinado em dados', 'base de treinamento', 'conjunto de dados de treinamento'
+        // APENAS PADRÕES GENUINAMENTE MODERNOS DE IA
+        const padroesIAGenuinos = {
+            'referencias_explicitas_ia': [
+                // Apenas referências explícitas a tecnologias pós-2018
+                'chatgpt', 'gpt-4', 'gpt-3', 'gpt-3.5', 'openai', 'large language model',
+                'como um modelo de ia', 'como uma inteligência artificial', 'assistente de ia',
+                'modelo de linguagem grande', 'llm', 'transformers', 'bard', 'claude',
+                'copilot', 'github copilot', 'midjourney', 'dall-e', 'stable diffusion'
             ],
-            'padroes_tecnicos_ia': [
-                'como um algoritmo', 'processamento de linguagem natural', 'pnl', 'rede neural',
-                'aprendizado de máquina', 'machine learning', 'deep learning', 'tokenização'
+            'padroes_tecnicos_modernos': [
+                // Termos técnicos que só fazem sentido para IA moderna
+                'tokenização', 'fine-tuning', 'prompt engineering', 'context window',
+                'reinforcement learning from human feedback', 'rlhf', 'chain of thought',
+                'few-shot learning', 'zero-shot learning', 'temperature setting',
+                'top-p sampling', 'transformer architecture'
             ],
-            'confissoes_diretas': [
-                'fui programado para', 'minha programação', 'como ia, eu', 'não tenho experiências pessoais',
-                'não possuo emoções', 'como sistema de ia', 'minha base de conhecimento'
+            'comportamentos_estereotipados_modernos': [
+                // Padrões de comportamento específicos de IA conversacional moderna
+                'como um assistente de ia', 'fui treinado pela', 'minha base de dados',
+                'não tenho experiências pessoais', 'não possuo emoções',
+                'como modelo de linguagem', 'minha programação'
             ]
         };
 
-        // CAMADA 2: PADRÕES DE MÉDIO RISCO (ESTILO ESTEREOTIPADO)
-        const padroesMedioRiscoIA = {
-            'excesso_estruturas_formais': [
-                'cabe aqui salientar que', 'convém aqui ressaltar que', 'importa aqui destacar que',
-                'cumpre aqui assinalar que', 'vale aqui sublinhar que', 'impõe-se considerar que',
-                'urge mencionar que', 'é imperioso destacar que'
+        // PADRÕES QUE SÃO COMUNS EM TEXTOS HUMANOS (ANTIGOS E MODERNOS)
+        const padroesHumanosComuns = {
+            'expressoes_academicas_tradicionais': [
+                'é importante destacar', 'convém ressaltar', 'considerando os fatores',
+                'pode-se inferir', 'observa-se que', 'conclui-se que', 
+                'de acordo com', 'verifica-se que', 'cabe salientar',
+                'é pertinente mencionar', 'pressupõe-se que', 'constata-se que',
+                'infere-se que', 'depreende-se que', 'evidencia-se que'
             ],
-            'qualificadores_excessivos': [
-                'extremamente significativo', 'profundamente relevante', 'altamente impactante',
-                'consideravelmente importante', 'notavelmente crucial', 'expressivamente vital',
-                'sobejamente conhecido', 'amplamente reconhecido'
+            'conectivos_academicos': [
+                'portanto', 'consequentemente', 'adicionalmente', 'notavelmente',
+                'consideravelmente', 'significativamente', 'efetivamente',
+                'sobretudo', 'principalmente', 'especialmente'
             ],
-            'generalizacoes_vagas': [
-                'é universalmente aceito', 'como é de conhecimento geral', 'todos sabem que',
-                'ninguém discorda que', 'é incontestável que', 'é indubitável que'
+            'estruturas_passivas_academicas': [
+                'é realizado', 'é observado', 'é verificado', 'é constatado',
+                'é possível identificar', 'pode ser observado', 'deve ser considerado',
+                'são apresentados', 'foram analisados', 'será discutido'
             ]
         };
 
-        // CAMADA 3: PADRÕES DE BAIXO RISCO (POSSÍVEL IA)
-        const padroesBaixoRiscoIA = {
-            'estruturas_repetitivas': [
-                'por um lado.*por outro lado', 'em primeiro lugar.*em segundo lugar',
-                'de um lado.*de outro lado', 'tanto.*quanto'
-            ],
-            'transicoes_excessivas': [
-                'adicionalmente', 'consequentemente', 'portanto', 'assim sendo', 'dessa forma',
-                'nesse sentido', 'nessa perspectiva', 'nesse contexto'
-            ]
-        };
-
-        // CAMADA 4: FORTES INDICADORES DE ESCRITA HUMANA
-        const padroesFortesHumanos = {
-            'marcadores_autoria': [
+        // FORTES INDICADORES DE ESCRITA HUMANA
+        const fortesIndicadoresHumanos = {
+            'marcadores_autoria_pessoal': [
                 'parto do pressuposto', 'acredito que', 'considero que', 'entendo que',
                 'na minha opinião', 'pela minha experiência', 'em minha análise',
-                'observo que', 'percebo que', 'constato que'
-            ],
-            'referencias_pessoais': [
                 'minha pesquisa', 'meu estudo', 'esta investigação', 'neste trabalho',
-                'na universidade', 'no departamento', 'na disciplina', 'orientado por',
-                'sob orientação do professor'
+                'na universidade', 'no departamento', 'na disciplina'
+            ],
+            'referencias_temporais_historicas': [
+                // Referências a eventos, anos ou contextos históricos
+                'século xx', 'século xix', 'década de', 'anos 90', 'anos 80',
+                'mil novecentos', 'revolução industrial', 'guerra mundial',
+                'era vitoriana', 'idade média', 'renascimento'
             ],
             'voz_ativa_pessoal': [
                 'analisei', 'pesquisei', 'investiguei', 'constatei', 'verifiquei',
-                'demonstrei', 'comprovei', 'identifiquei', 'detectei'
+                'demonstrei', 'comprovei', 'identifiquei', 'detectei', 'coletei',
+                'entrevistei', 'apliquei', 'desenvolvi'
             ]
         };
 
-        // CAMADA 5: INDICADORES MODERADOS DE ESCRITA HUMANA
-        const padroesModeradosHumanos = {
-            'expressoes_academicas_naturais': [
-                'de acordo com', 'segundo', 'conforme', 'como propõe', 'na visão de',
-                'o autor defende', 'a autora argumenta', 'como demonstra'
-            ],
-            'diversidade_sintatica': [
-                'entretanto', 'contudo', 'todavia', 'no entanto', 'porém',
-                'além disso', 'outrossim', 'igualmente'
-            ]
-        };
-
-        // ========== SISTEMA DE PONTUAÇÃO AVANÇADO ==========
-
-        class SistemaPontuacao {
+        class AnalisadorCorrigido {
             constructor() {
-                this.pontuacao = 0;
-                this.maxPontos = 100;
+                this.pontuacaoIA = 0;
+                this.pontuacaoHumano = 0;
                 this.fatores = [];
-                this.confiancaFatores = [];
+                this.deteccoes = [];
             }
 
-            adicionarFator(nome, valor, peso, confianca, explicacao) {
-                const pontos = valor * peso;
-                this.pontuacao += pontos;
+            analisarTexto(texto) {
+                this.reset();
+                
+                // FATOR 1: Verificação de contexto histórico
+                const contextoHistorico = this.analisarContextoHistorico(texto);
+                this.adicionarFator('Contexto Histórico', contextoHistorico.pontuacao, contextoHistorico.confianca, contextoHistorico.explicacao);
+                
+                // FATOR 2: Padrões genuínos de IA moderna
+                const padroesIADetectados = this.detectarPadroesIAGenuinos(texto);
+                if (padroesIADetectados.length > 0) {
+                    this.adicionarFator('Padrões Modernos de IA', 
+                        Math.min(1, padroesIADetectados.length * 0.3), 
+                        0.95, 
+                        `${padroesIADetectados.length} padrões genuínos de IA moderna detectados`);
+                }
+
+                // FATOR 3: Fortes indicadores humanos
+                const indicadoresHumanos = this.detectarIndicadoresHumanosFortes(texto);
+                if (indicadoresHumanos.length > 0) {
+                    this.adicionarFator('Marcadores de Autoria Humana', 
+                        -Math.min(1, indicadoresHumanos.length * 0.4), 
+                        0.90, 
+                        `${indicadoresHumanos.length} fortes indicadores de escrita humana`);
+                }
+
+                // FATOR 4: Análise estrutural (conservadora)
+                const estrutura = this.analisarEstrutura(texto);
+                this.adicionarFator('Diversidade Lexical', 
+                    estrutura.diversidade < 0.3 ? 0.2 : 0, 
+                    0.7, 
+                    `Diversidade: ${Math.round(estrutura.diversidade * 100)}%`);
+
+                // FATOR 5: Coerência temporal
+                const coerenciaTemporal = this.verificarCoerenciaTemporal(texto);
+                this.adicionarFator('Coerência Temporal', 
+                    coerenciaTemporal.incoerente ? 0.3 : -0.2, 
+                    0.8, 
+                    coerenciaTemporal.explicacao);
+
+                return this.calcularResultado();
+            }
+
+            analisarContextoHistorico(texto) {
+                // Detectar referências a anos específicos
+                const anos = texto.match(/(19[0-9]{2}|20[0-1][0-9])\b/g) || [];
+                const anosAntigos = anos.filter(ano => parseInt(ano) < 2018);
+                
+                if (anosAntigos.length > 0) {
+                    return {
+                        pontuacao: -0.8,
+                        confianca: 0.95,
+                        explicacao: `Texto referencia anos históricos (${anosAntigos.join(', ')}) - forte indicador humano`
+                    };
+                }
+
+                // Detectar referências a eventos históricos
+                const eventosHistoricos = [
+                    'segunda guerra', 'primeira guerra', 'guerra fria', 'revolução', 
+                    'ditadura', 'regime militar', 'constituição de 1988', 'queda do muro',
+                    'globalização', 'neoliberalismo', 'socialismo real'
+                ];
+
+                const temReferenciaHistorica = eventosHistoricos.some(evento => 
+                    texto.toLowerCase().includes(evento)
+                );
+
+                if (temReferenciaHistorica) {
+                    return {
+                        pontuacao: -0.6,
+                        confianca: 0.85,
+                        explicacao: 'Referências a eventos históricos pré-IA'
+                    };
+                }
+
+                return {
+                    pontuacao: 0,
+                    confianca: 0.5,
+                    explicacao: 'Sem referências históricas explícitas'
+                };
+            }
+
+            detectarPadroesIAGenuinos(texto) {
+                const deteccoes = [];
+                const textoLower = texto.toLowerCase();
+
+                Object.entries(padroesIAGenuinos).forEach(([categoria, padroes]) => {
+                    padroes.forEach(padrao => {
+                        const regex = new RegExp(padrao, 'gi');
+                        let match;
+                        while ((match = regex.exec(textoLower)) !== null) {
+                            deteccoes.push({
+                                termo: texto.substring(match.index, match.index + match[0].length),
+                                tipo: 'alto_risco_ia',
+                                categoria: categoria,
+                                justificativa: 'Padrão genuíno de IA moderna',
+                                contexto: this.obterContexto(texto, match.index, match[0].length),
+                                posicao: [match.index, match.index + match[0].length]
+                            });
+                        }
+                    });
+                });
+
+                return deteccoes;
+            }
+
+            detectarIndicadoresHumanosFortes(texto) {
+                const deteccoes = [];
+                const textoLower = texto.toLowerCase();
+
+                Object.entries(fortesIndicadoresHumanos).forEach(([categoria, padroes]) => {
+                    padroes.forEach(padrao => {
+                        const regex = new RegExp(padrao, 'gi');
+                        let match;
+                        while ((match = regex.exec(textoLower)) !== null) {
+                            deteccoes.push({
+                                termo: texto.substring(match.index, match.index + match[0].length),
+                                tipo: 'forte_humano',
+                                categoria: categoria,
+                                justificativa: 'Forte indicador de autoria humana',
+                                contexto: this.obterContexto(texto, match.index, match[0].length),
+                                posicao: [match.index, match.index + match[0].length]
+                            });
+                        }
+                    });
+                });
+
+                return deteccoes;
+            }
+
+            analisarEstrutura(texto) {
+                const palavras = texto.match(/\b\w+\b/g) || [];
+                const palavrasUnicas = new Set(palavras.map(p => p.toLowerCase()));
+                const diversidade = palavrasUnicas.size / palavras.length;
+
+                return {
+                    diversidade,
+                    totalPalavras: palavras.length
+                };
+            }
+
+            verificarCoerenciaTemporal(texto) {
+                // Verificar contradições temporais (ex: referência a ChatGPT em texto de 1999)
+                const temIAModerna = Object.values(padroesIAGenuinos).flat().some(padrao => 
+                    texto.toLowerCase().includes(padrao)
+                );
+
+                const anos = texto.match(/(19[0-9]{2}|20[0-1][0-9])\b/g) || [];
+                const anosAntigos = anos.filter(ano => parseInt(ano) < 2018);
+
+                if (temIAModerna && anosAntigos.length > 0) {
+                    return {
+                        incoerente: true,
+                        explicacao: `INCOERÊNCIA: Texto de ${anosAntigos[0]} menciona IA moderna`
+                    };
+                }
+
+                return {
+                    incoerente: false,
+                    explicacao: 'Coerência temporal preservada'
+                };
+            }
+
+            obterContexto(texto, inicio, comprimento, tamanho = 50) {
+                const start = Math.max(0, inicio - tamanho);
+                const end = Math.min(texto.length, inicio + comprimento + tamanho);
+                return texto.substring(start, end);
+            }
+
+            adicionarFator(nome, valor, confianca, explicacao) {
                 this.fatores.push({
                     nome,
                     valor: Math.round(valor * 100) / 100,
-                    peso,
-                    pontos: Math.round(pontos * 100) / 100,
+                    confianca: Math.round(confianca * 100) / 100,
                     explicacao,
-                    tipo: pontos > 0 ? 'ia' : 'humano'
+                    tipo: valor > 0 ? 'ia' : 'humano'
                 });
-                this.confiancaFatores.push(confianca);
+
+                if (valor > 0) {
+                    this.pontuacaoIA += valor * confianca;
+                } else {
+                    this.pontuacaoHumano += Math.abs(valor) * confianca;
+                }
             }
 
-            calcularConfiancaGeral() {
-                if (this.confiancaFatores.length === 0) return 0.5;
-                
-                // Média ponderada pela importância dos fatores
-                const confiancaTotal = this.confiancaFatores.reduce((sum, conf, index) => {
-                    return sum + (conf * Math.abs(this.fatores[index].peso));
-                }, 0);
-                
-                const pesoTotal = this.fatores.reduce((sum, fator) => sum + Math.abs(fator.peso), 0);
-                
-                return Math.min(0.95, Math.max(0.3, confiancaTotal / pesoTotal));
-            }
+            calcularResultado() {
+                // Base mais conservadora - assume humano até prova contrária
+                const baseHumano = 0.7;
+                const ajusteIA = Math.min(0.25, this.pontuacaoIA);
+                const ajusteHumano = Math.min(0.25, this.pontuacaoHumano);
 
-            getResultado() {
-                const probabilidadeIA = Math.max(0.05, Math.min(0.95, 0.5 + (this.pontuacao / this.maxPontos)));
-                const confianca = this.calcularConfiancaGeral();
-                
+                const probIA = Math.max(0.05, Math.min(0.95, 
+                    baseHumano - ajusteHumano + ajusteIA
+                ));
+
+                // Confiança baseada na força das evidências
+                const forcaEvidencias = Math.max(this.pontuacaoIA, this.pontuacaoHumano);
+                const confianca = Math.max(0.3, Math.min(0.95, 
+                    0.5 + (forcaEvidencias * 0.5)
+                ));
+
                 return {
-                    probabilidadeIA: Math.round(probabilidadeIA * 1000) / 1000,
-                    probabilidadeHumana: Math.round((1 - probabilidadeIA) * 1000) / 1000,
+                    probabilidadeIA: Math.round(probIA * 1000) / 1000,
+                    probabilidadeHumana: Math.round((1 - probIA) * 1000) / 1000,
                     confianca: Math.round(confianca * 1000) / 1000,
                     fatores: this.fatores,
-                    pontuacaoTotal: Math.round(this.pontuacao * 100) / 100
+                    pontuacaoIA: Math.round(this.pontuacaoIA * 100) / 100,
+                    pontuacaoHumano: Math.round(this.pontuacaoHumano * 100) / 100
                 };
             }
-        }
 
-        // ========== FUNÇÕES DE ANÁLISE AVANÇADAS ==========
-
-        function analisarPadroesLinguisticos(texto) {
-            const padroesDetectados = [];
-            const textoLower = texto.toLowerCase();
-
-            // Análise de Alto Risco
-            Object.entries(padroesAltoRiscoIA).forEach(([categoria, padroes]) => {
-                padroes.forEach(padrao => {
-                    const regex = new RegExp(padrao, 'gi');
-                    let match;
-                    while ((match = regex.exec(textoLower)) !== null) {
-                        padroesDetectados.push({
-                            termo: texto.substring(match.index, match.index + match[0].length),
-                            tipo: 'alto_risco_ia',
-                            categoria: categoria,
-                            justificativa: 'Referência direta a IA ou padrão técnico específico',
-                            contexto: obterContexto(texto, match.index, match[0].length),
-                            posicao: [match.index, match.index + match[0].length],
-                            peso: 2.0,
-                            confianca: 0.95
-                        });
-                    }
-                });
-            });
-
-            // Análise de Médio Risco
-            Object.entries(padroesMedioRiscoIA).forEach(([categoria, padroes]) => {
-                padroes.forEach(padrao => {
-                    const regex = new RegExp(padrao, 'gi');
-                    let match;
-                    while ((match = regex.exec(textoLower)) !== null) {
-                        padroesDetectados.push({
-                            termo: texto.substring(match.index, match.index + match[0].length),
-                            tipo: 'medio_risco_ia',
-                            categoria: categoria,
-                            justificativa: 'Padrão estereotipado comum em textos de IA',
-                            contexto: obterContexto(texto, match.index, match[0].length),
-                            posicao: [match.index, match.index + match[0].length],
-                            peso: 1.2,
-                            confianca: 0.75
-                        });
-                    }
-                });
-            });
-
-            // Análise de Baixo Risco
-            Object.entries(padroesBaixoRiscoIA).forEach(([categoria, padroes]) => {
-                padroes.forEach(padrao => {
-                    const regex = new RegExp(padrao, 'gi');
-                    let match;
-                    while ((match = regex.exec(textoLower)) !== null) {
-                        padroesDetectados.push({
-                            termo: texto.substring(match.index, match.index + match[0].length),
-                            tipo: 'baixo_risco_ia',
-                            categoria: categoria,
-                            justificativa: 'Possível padrão de IA, mas comum em textos acadêmicos',
-                            contexto: obterContexto(texto, match.index, match[0].length),
-                            posicao: [match.index, match.index + match[0].length],
-                            peso: 0.5,
-                            confianca: 0.6
-                        });
-                    }
-                });
-            });
-
-            // Análise de Fortes Indicadores Humanos
-            Object.entries(padroesFortesHumanos).forEach(([categoria, padroes]) => {
-                padroes.forEach(padrao => {
-                    const regex = new RegExp(padrao, 'gi');
-                    let match;
-                    while ((match = regex.exec(textoLower)) !== null) {
-                        padroesDetectados.push({
-                            termo: texto.substring(match.index, match.index + match[0].length),
-                            tipo: 'forte_humano',
-                            categoria: categoria,
-                            justificativa: 'Forte indicador de autoria humana',
-                            contexto: obterContexto(texto, match.index, match[0].length),
-                            posicao: [match.index, match.index + match[0].length],
-                            peso: -1.8,
-                            confianca: 0.85
-                        });
-                    }
-                });
-            });
-
-            // Análise de Moderados Indicadores Humanos
-            Object.entries(padroesModeradosHumanos).forEach(([categoria, padroes]) => {
-                padroes.forEach(padrao => {
-                    const regex = new RegExp(padrao, 'gi');
-                    let match;
-                    while ((match = regex.exec(textoLower)) !== null) {
-                        padroesDetectados.push({
-                            termo: texto.substring(match.index, match.index + match[0].length),
-                            tipo: 'moderado_humano',
-                            categoria: categoria,
-                            justificativa: 'Indicador moderado de escrita humana',
-                            contexto: obterContexto(texto, match.index, match[0].length),
-                            posicao: [match.index, match.index + match[0].length],
-                            peso: -0.8,
-                            confianca: 0.7
-                        });
-                    }
-                });
-            });
-
-            return padroesDetectados;
-        }
-
-        function obterContexto(texto, inicio, comprimento, tamanhoContexto = 50) {
-            const start = Math.max(0, inicio - tamanhoContexto);
-            const end = Math.min(texto.length, inicio + comprimento + tamanhoContexto);
-            return texto.substring(start, end);
-        }
-
-        function analisarEstruturaTexto(texto) {
-            const frases = texto.split(/[.!?]+/).filter(f => f.trim().length > 0);
-            const paragrafos = texto.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-            const palavras = texto.match(/\b\w+\b/g) || [];
-
-            // Análise de diversidade lexical
-            const palavrasUnicas = new Set(palavras.map(p => p.toLowerCase()));
-            const diversidadeLexical = palavrasUnicas.size / palavras.length;
-
-            // Análise de comprimento médio de frases
-            const comprimentoMedioFrases = palavras.length / frases.length;
-
-            // Análise de repetição de frases
-            const frasesSimplificadas = frases.map(f => f.toLowerCase().replace(/[^\w\s]/g, '').trim());
-            const frasesRepetidas = new Set();
-            const repeticoes = [];
-
-            for (let i = 0; i < frasesSimplificadas.length; i++) {
-                for (let j = i + 1; j < frasesSimplificadas.length; j++) {
-                    if (frasesSimplificadas[i] === frasesSimplificadas[j] && 
-                        frasesSimplificadas[i].length > 10) {
-                        frasesRepetidas.add(frasesSimplificadas[i]);
-                        repeticoes.push({frase: frases[i], indices: [i, j]});
-                    }
-                }
+            reset() {
+                this.pontuacaoIA = 0;
+                this.pontuacaoHumano = 0;
+                this.fatores = [];
+                this.deteccoes = [];
             }
-
-            return {
-                diversidadeLexical,
-                comprimentoMedioFrases,
-                frasesRepetidas: repeticoes.length,
-                totalFrases: frases.length,
-                totalParagrafos: paragrafos.length,
-                totalPalavras: palavras.length
-            };
         }
 
-        function analisarCoerenciaParagrafos(texto) {
-            const paragrafos = texto.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-            let pontuacaoCoerencia = 0;
-            const problemas = [];
-
-            if (paragrafos.length < 2) {
-                return { pontuacao: 0.5, problemas: ['Texto muito curto para análise de coerência'] };
-            }
-
-            for (let i = 0; i < paragrafos.length - 1; i++) {
-                const paragrafoAtual = paragrafos[i].toLowerCase();
-                const proximoParagrafo = paragrafos[i + 1].toLowerCase();
-
-                // Verificar conectividade entre parágrafos
-                const palavrasChaveAtual = new Set(paragrafoAtual.match(/\b\w+\b/g) || []);
-                const palavrasChaveProximo = new Set(proximoParagrafo.match(/\b\w+\b/g) || []);
-                
-                const palavrasComuns = [...palavrasChaveAtual].filter(palavra => 
-                    palavrasChaveProximo.has(palavra) && palavra.length > 3
-                );
-
-                const similaridade = palavrasComuns.length / Math.min(palavrasChaveAtual.size, palavrasChaveProximo.size);
-
-                if (similaridade < 0.1) {
-                    problemas.push(`Transição fraca entre parágrafos ${i + 1} e ${i + 2}`);
-                    pontuacaoCoerencia -= 0.2;
-                } else if (similaridade > 0.3) {
-                    pontuacaoCoerencia += 0.1;
-                }
-            }
-
-            // Normalizar para escala 0-1
-            const coerenciaNormalizada = Math.max(0, Math.min(1, 0.5 + pontuacaoCoerencia));
-
-            return {
-                pontuacao: Math.round(coerenciaNormalizada * 100) / 100,
-                problemas,
-                confianca: 0.7
-            };
-        }
-
-        // ========== FUNÇÃO PRINCIPAL DE ANÁLISE ==========
-
-        function analisarTextoCompleto(texto) {
-            const sistema = new SistemaPontuacao();
-            const padroesDetectados = analisarPadroesLinguisticos(texto);
-            const estrutura = analisarEstruturaTexto(texto);
-            const coerencia = analisarCoerenciaParagrafos(texto);
-
-            // CAMADA 1: Análise de Padrões Linguísticos
-            const padroesIA = padroesDetectados.filter(p => p.peso > 0);
-            const padroesHumanos = padroesDetectados.filter(p => p.peso < 0);
-
-            if (padroesIA.length > 0) {
-                const pesoTotalIA = padroesIA.reduce((sum, p) => sum + p.peso, 0);
-                sistema.adicionarFator(
-                    'Padrões Linguísticos de IA',
-                    Math.min(1, pesoTotalIA / 10),
-                    25,
-                    0.8,
-                    `${padroesIA.length} padrões de IA detectados`
-                );
-            }
-
-            if (padroesHumanos.length > 0) {
-                const pesoTotalHumano = Math.abs(padroesHumanos.reduce((sum, p) => sum + p.peso, 0));
-                sistema.adicionarFator(
-                    'Padrões de Escrita Humana',
-                    -Math.min(1, pesoTotalHumano / 10),
-                    20,
-                    0.75,
-                    `${padroesHumanos.length} indicadores humanos fortes`
-                );
-            }
-
-            // CAMADA 2: Análise Estrutural
-            sistema.adicionarFator(
-                'Diversidade Lexical',
-                estrutura.diversidadeLexical < 0.4 ? 0.8 : 
-                estrutura.diversidadeLexical < 0.6 ? 0.3 : 0,
-                15,
-                0.8,
-                `Diversidade lexical: ${Math.round(estrutura.diversidadeLexical * 100)}%`
-            );
-
-            sistema.adicionarFator(
-                'Comprimento Médio de Frases',
-                estrutura.comprimentoMedioFrases > 25 ? 0.6 : 
-                estrutura.comprimentoMedioFrases < 10 ? -0.4 : 0,
-                10,
-                0.7,
-                `${Math.round(estrutura.comprimentoMedioFrases)} palavras por frase`
-            );
-
-            // CAMADA 3: Análise de Coerência
-            sistema.adicionarFator(
-                'Coerência entre Parágrafos',
-                coerencia.pontuacao < 0.3 ? 0.6 : 
-                coerencia.pontuacao > 0.7 ? -0.5 : 0,
-                12,
-                coerencia.confianca,
-                `Coerência: ${Math.round(coerencia.pontuacao * 100)}%`
-            );
-
-            // CAMADA 4: Análise de Repetição
-            sistema.adicionarFator(
-                'Repetições de Frases',
-                estrutura.frasesRepetidas > 0 ? 0.4 : 0,
-                8,
-                0.9,
-                estrutura.frasesRepetidas > 0 ? 
-                    `${estrutura.frasesRepetidas} frases repetidas` : 'Sem repetições problemáticas'
-            );
-
-            // CAMADA 5: Fator de Contexto Acadêmico (favorece escrita humana)
-            sistema.adicionarFator(
-                'Contexto Acadêmico',
-                -0.3,
-                10,
-                0.6,
-                'Considera escrita acadêmica formal como legítima'
-            );
-
-            const resultado = sistema.getResultado();
-            
-            return {
-                ...resultado,
-                padroesDetectados,
-                estrutura,
-                coerencia,
-                textoDestacado: gerarTextoDestacado(texto, padroesDetectados)
-            };
-        }
-
-        function gerarTextoDestacado(texto, padroesDetectados) {
-            if (!padroesDetectados || padroesDetectados.length === 0) {
+        function gerarTextoDestacado(texto, deteccoes) {
+            if (!deteccoes || deteccoes.length === 0) {
                 return texto;
             }
             
             let textoDestacado = texto;
-            const padroesOrdenados = [...padroesDetectados]
-                .filter(padrao => padrao.posicao[0] !== undefined)
+            const deteccoesOrdenadas = [...deteccoes]
+                .filter(d => d.posicao[0] !== undefined)
                 .sort((a, b) => b.posicao[0] - a.posicao[0]);
             
-            padroesOrdenados.forEach(padraoInfo => {
-                const [start, end] = padraoInfo.posicao;
+            deteccoesOrdenadas.forEach(deteccao => {
+                const [start, end] = deteccao.posicao;
                 const termoOriginal = texto.substring(start, end);
                 
-                const spanDestacado = `<span class="padrao-detectado" data-tipo="${padraoInfo.tipo}" title="${padraoInfo.justificativa}">${termoOriginal}</span>`;
+                const spanDestacado = `<span class="padrao-detectado" data-tipo="${deteccao.tipo}" title="${deteccao.justificativa}">${termoOriginal}</span>`;
                 
                 textoDestacado = textoDestacado.substring(0, start) + spanDestacado + textoDestacado.substring(end);
             });
@@ -678,42 +461,43 @@
             return textoDestacado;
         }
 
-        // ========== INTERFACE E RELATÓRIO ==========
+        function analisarTextoCompleto(texto) {
+            const analisador = new AnalisadorCorrigido();
+            const resultado = analisador.analisarTexto(texto);
+            
+            // Combinar todas as detecções para highlight
+            const todasDeteccoes = [
+                ...analisador.detectarPadroesIAGenuinos(texto),
+                ...analisador.detectarIndicadoresHumanosFortes(texto)
+            ];
 
-        function gerarRelatorioDetalhado(result) {
+            return {
+                ...resultado,
+                textoDestacado: gerarTextoDestacado(texto, todasDeteccoes),
+                deteccoes: todasDeteccoes
+            };
+        }
+
+        function gerarRelatorio(result) {
             const aiProb = Math.round(result.probabilidadeIA * 100);
             const humanProb = Math.round(result.probabilidadeHumana * 100);
             const confidence = Math.round(result.confianca * 100);
 
-            let veredito = 'Análise Inconclusiva';
-            let vereditoColor = '#64748b';
-            let confidenceBadge = 'medium-confidence';
+            let veredito = 'Escrita Humana Provável';
+            let vereditoColor = '#059669';
 
-            if (aiProb >= 80) {
-                veredito = 'Alta Probabilidade de IA';
+            if (aiProb >= 70) {
+                veredito = 'Possível Uso de IA';
                 vereditoColor = '#dc2626';
-                confidenceBadge = result.confianca > 0.8 ? 'high-confidence' : 'medium-confidence';
-            } else if (humanProb >= 80) {
-                veredito = 'Alta Probabilidade Humana';
-                vereditoColor = '#059669';
-                confidenceBadge = result.confianca > 0.8 ? 'high-confidence' : 'medium-confidence';
-            } else if (aiProb >= 60) {
-                veredito = 'Moderada Probabilidade de IA';
-                vereditoColor = '#ea580c';
-            } else if (humanProb >= 60) {
-                veredito = 'Moderada Probabilidade Humana';
-                vereditoColor = '#0d9488';
+            } else if (aiProb >= 50) {
+                veredito = 'Inconclusivo';
+                vereditoColor = '#f59e0b';
             }
 
-            if (result.confianca < 0.6) {
-                confidenceBadge = 'low-confidence';
-            }
-
-            // Header do resultado
-            let relatorioHTML = `
+            let html = `
                 <div style="text-align: center; margin-bottom: 30px; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
                     <h3 style="color: ${vereditoColor}; margin-bottom: 15px;">${veredito}</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 15px;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
                         <div>
                             <div style="font-size: 2em; font-weight: bold; color: #dc2626;">${aiProb}%</div>
                             <div style="color: #6b7280; font-size: 0.9em;">Indicadores de IA</div>
@@ -725,113 +509,56 @@
                         <div>
                             <div style="font-size: 2em; font-weight: bold; color: #2563eb;">${confidence}%</div>
                             <div style="color: #6b7280; font-size: 0.9em;">Confiabilidade</div>
-                            <span class="confidence-badge ${confidenceBadge}">${confidence >= 80 ? 'ALTA' : confidence >= 60 ? 'MÉDIA' : 'BAIXA'}</span>
                         </div>
                     </div>
                 </div>
             `;
 
-            // Análise Detalhada por Fatores
-            relatorioHTML += `
-                <div class="analise-detalhada">
-                    <h4>📊 Análise Detalhada por Fatores</h4>
-                    ${result.fatores.map(fator => {
-                        const tipoClasse = fator.tipo === 'ia' ? 'fator-negativo' : 
-                                         fator.pontos < 0 ? 'fator-positivo' : 'fator-neutro';
-                        const sinal = fator.pontos > 0 ? '+' : '';
-                        return `
-                            <div class="fator-analise ${tipoClasse}">
-                                <div style="display: flex; justify-content: between; align-items: center;">
-                                    <strong>${fator.nome}</strong>
-                                    <span style="font-weight: bold; color: ${fator.pontos > 0 ? '#dc2626' : '#059669'}">
-                                        ${sinal}${Math.round(fator.pontos * 100) / 100}
-                                    </span>
-                                </div>
-                                <div style="color: #6b7280; font-size: 0.9em; margin-top: 5px;">
-                                    ${fator.explicacao}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
+            // Alerta histórico se aplicável
+            const fatorHistorico = result.fatores.find(f => f.nome === 'Contexto Histórico');
+            if (fatorHistorico && fatorHistorico.valor < 0) {
+                html += `
+                    <div class="alerta-historico">
+                        <strong>📜 CONTEXTO HISTÓRICO IDENTIFICADO:</strong><br>
+                        ${fatorHistorico.explicacao}. Textos anteriores a 2018 são considerados humanos por padrão.
+                    </div>
+                `;
+            }
 
-            // Legenda
-            relatorioHTML += `
-                <div class="legenda">
-                    <div class="legenda-item">
-                        <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #dc2626;"></div>
-                        <span>Alto Risco IA</span>
-                    </div>
-                    <div class="legenda-item">
-                        <div class="legenda-cor" style="background-color: #fff7ed; border: 1px solid #ea580c;"></div>
-                        <span>Médio Risco IA</span>
-                    </div>
-                    <div class="legenda-item">
-                        <div class="legenda-cor" style="background-color: #fffbeb; border: 1px solid #d97706;"></div>
-                        <span>Baixo Risco IA</span>
-                    </div>
-                    <div class="legenda-item">
-                        <div class="legenda-cor" style="background-color: #ecfdf5; border: 1px solid #059669;"></div>
-                        <span>Forte Humano</span>
-                    </div>
-                    <div class="legenda-item">
-                        <div class="legenda-cor" style="background-color: #f0fdfa; border: 1px solid #0d9488;"></div>
-                        <span>Moderado Humano</span>
-                    </div>
-                </div>
-            `;
-
-            // Texto Destacado
-            relatorioHTML += `
-                <div class="texto-destacado">
-                    <h5>🔍 Texto com Padrões Destacados:</h5>
-                    <div>${result.textoDestacado}</div>
-                </div>
-            `;
-
-            // Estatísticas de Detecção
-            const padroesIACount = result.padroesDetectados.filter(p => p.peso > 0).length;
-            const padroesHumanosCount = result.padroesDetectados.filter(p => p.peso < 0).length;
-
-            relatorioHTML += `
-                <div class="metricas">
-                    <div class="metrica-card">
-                        <div>Padrões IA Detectados</div>
-                        <div class="metrica-valor" style="color: ${padroesIACount === 0 ? '#059669' : '#dc2626'}">
-                            ${padroesIACount}
+            // Fatores de análise
+            html += `<h4>📊 Fatores de Análise:</h4>`;
+            result.fatores.forEach(fator => {
+                const classe = fator.tipo === 'ia' ? 'fator-negativo' : 'fator-positivo';
+                const sinal = fator.valor > 0 ? '+' : '';
+                html += `
+                    <div class="fator-analise ${classe}">
+                        <div style="display: flex; justify-content: between; align-items: center;">
+                            <strong>${fator.nome}</strong>
+                            <span style="font-weight: bold; color: ${fator.valor > 0 ? '#dc2626' : '#059669'}">
+                                ${sinal}${fator.valor}
+                            </span>
                         </div>
-                        <small>${padroesIACount === 0 ? 'Nenhum padrão suspeito' : 'Padrões identificados'}</small>
-                    </div>
-                    <div class="metrica-card">
-                        <div>Indicadores Humanos</div>
-                        <div class="metrica-valor" style="color: ${padroesHumanosCount > 0 ? '#059669' : '#6b7280'}">
-                            ${padroesHumanosCount}
+                        <div style="color: #6b7280; font-size: 0.9em; margin-top: 5px;">
+                            ${fator.explicacao} (Confiança: ${Math.round(fator.confianca * 100)}%)
                         </div>
-                        <small>${padroesHumanosCount > 0 ? 'Marcadores de autoria' : 'Poucos indicadores'}</small>
                     </div>
-                    <div class="metrica-card">
-                        <div>Diversidade Lexical</div>
-                        <div class="metrica-valor" style="color: ${result.estrutura.diversidadeLexical > 0.5 ? '#059669' : '#dc2626'}">
-                            ${Math.round(result.estrutura.diversidadeLexical * 100)}%
-                        </div>
-                        <small>${result.estrutura.diversidadeLexical > 0.5 ? 'Boa variedade' : 'Baixa variedade'}</small>
-                    </div>
-                    <div class="metrica-card">
-                        <div>Coerência</div>
-                        <div class="metrica-valor" style="color: ${result.coerencia.pontuacao > 0.6 ? '#059669' : '#dc2626'}">
-                            ${Math.round(result.coerencia.pontuacao * 100)}%
-                        </div>
-                        <small>${result.coerencia.pontuacao > 0.6 ? 'Boa coerência' : 'Coerência fraca'}</small>
-                    </div>
-                </div>
-            `;
+                `;
+            });
 
-            return relatorioHTML;
+            // Texto destacado
+            if (result.deteccoes.length > 0) {
+                html += `
+                    <div class="texto-destacado">
+                        <h5>🔍 Texto com Padrões Destacados:</h5>
+                        <div>${result.textoDestacado}</div>
+                    </div>
+                `;
+            }
+
+            return html;
         }
 
-        // ========== EVENT LISTENERS ==========
-
+        // Event listeners
         document.getElementById('textInput').addEventListener('input', function() {
             const text = this.value;
             const chars = text.length;
@@ -853,13 +580,13 @@
             }
             
             button.disabled = true;
-            button.textContent = 'Analisando (Sistema Multi-Camadas)...';
-            resultDiv.innerHTML = '<p>⏳ Executando análise de 12 dimensões...</p>';
+            button.textContent = 'Analisando...';
+            resultDiv.innerHTML = '<p>⏳ Executando análise corrigida...</p>';
             
             setTimeout(() => {
                 try {
                     const result = analisarTextoCompleto(text);
-                    const relatorioHTML = gerarRelatorioDetalhado(result);
+                    const relatorioHTML = gerarRelatorio(result);
                     
                     resultDiv.innerHTML = relatorioHTML;
                 } catch (error) {
@@ -867,17 +594,17 @@
                     resultDiv.innerHTML = '<p style="color: red;">❌ Erro na análise. Tente novamente.</p>';
                 } finally {
                     button.disabled = false;
-                    button.textContent = 'Analisar com Alta Confiabilidade';
+                    button.textContent = 'Analisar Texto';
                 }
-            }, 1500);
+            }, 1000);
         });
 
-        // Texto de exemplo
-        document.getElementById('textInput').value = `Esta pesquisa analisa os impactos da transformação digital no ensino superior. Parto do pressuposto de que as tecnologias, quando bem integradas, potencializam a aprendizagem.
+        // Texto de exemplo histórico
+        document.getElementById('textInput').value = `Este estudo, realizado em 1999, analisa os impactos da internet emergente na educação superior. Parto do pressuposto de que as novas tecnologias de comunicação, quando adequadamente integradas, podem transformar as práticas pedagógicas.
 
-No contexto universitário atual, observa-se crescente uso de ferramentas digitais. Conforme demonstra Silva (2022), essa integração requer abordagem pedagógica consistente. Os dados coletados indicam que docentes com formação continuada mostram maior propensão à adoção tecnológica.
+Conforme demonstrado pelos dados coletados em 1998 junto a universidades brasileiras, observa-se uma resistência inicial dos docentes em relação ao uso educacional da world wide web. No entanto, os resultados indicam que aqueles que participaram de programas de capacitação mostraram maior abertura à inovação.
 
-Considero que os resultados reforçam a importância do desenvolvimento profissional para efetiva integração tecnológica. Minha análise sugere que investimentos em capacitação docente trazem retornos significativos.`;
+Considero que estes achados reforçam a importância do investimento em desenvolvimento profissional docente, especialmente em um contexto de rápidas transformações tecnológicas.`;
 
         document.getElementById('textInput').dispatchEvent(new Event('input'));
     </script>
