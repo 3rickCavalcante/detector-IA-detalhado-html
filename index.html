@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detector de IA - Análise Avançada</title>
+    <title>Analisador de Texto Acadêmico - IA vs Humano</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
@@ -36,8 +36,8 @@
         .result { margin-top: 20px; padding: 20px; background: #f8fafc; border-radius: 10px; }
         .stats { background: #e2e8f0; padding: 10px; border-radius: 5px; margin-bottom: 10px; }
         
-        /* Estilos para termos suspeitos */
-        .termo-suspeito {
+        /* Estilos para padrões detectados */
+        .padrao-detectado {
             background-color: #fef3c7;
             border: 1px solid #f59e0b;
             border-radius: 3px;
@@ -46,16 +46,14 @@
             cursor: help;
             position: relative;
         }
-        .termo-suspeito:hover {
+        .padrao-detectado:hover {
             background-color: #fde68a;
             z-index: 1000;
         }
-        .termo-suspeito[data-tipo="expressao_formal"] { border-color: #ef4444; background-color: #fef2f2; }
-        .termo-suspeito[data-tipo="conectivo_complexo"] { border-color: #8b5cf6; background-color: #faf5ff; }
-        .termo-suspeito[data-tipo="voz_passiva"] { border-color: #06b6d4; background-color: #ecfeff; }
-        .termo-suspeito[data-tipo="superlativo"] { border-color: #f59e0b; background-color: #fffbeb; }
-        .termo-suspeito[data-tipo="repeticao"] { border-color: #dc2626; background-color: #fef2f2; }
-        .termo-suspeito[data-tipo="estrutura_complexa"] { border-color: #7c3aed; background-color: #f5f3ff; }
+        .padrao-detectado[data-tipo="padrao_ia"] { border-color: #ef4444; background-color: #fef2f2; }
+        .padrao-detectado[data-tipo="escrita_humana"] { border-color: #10b981; background-color: #ecfdf5; }
+        .padrao-detectado[data-tipo="repeticao"] { border-color: #dc2626; background-color: #fef2f2; }
+        .padrao-detectado[data-tipo="estrutura_complexa"] { border-color: #7c3aed; background-color: #f5f3ff; }
         
         .texto-destacado {
             background: white;
@@ -111,20 +109,6 @@
             border-radius: 3px;
         }
         
-        .progress-bar {
-            height: 10px;
-            background: #e2e8f0;
-            border-radius: 5px;
-            margin: 10px 0;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-        
         .metricas {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -152,66 +136,99 @@
             margin: 10px 0;
             border-radius: 5px;
         }
+
+        .contexto-info {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔍 Detector de IA - Análise Avançada</h1>
-            <p>Identifique termos e expressões suspeitos de terem sido gerados por IA com maior precisão</p>
+            <h1>🔍 Analisador de Texto Acadêmico - IA vs Humano</h1>
+            <p>Análise especializada para textos de conclusão de curso e trabalhos acadêmicos</p>
         </div>
         
         <div class="app-card">
+            <div class="contexto-info">
+                <strong>⚠️ Contexto de Uso:</strong> Esta ferramenta foi desenvolvida para análise de textos acadêmicos 
+                produzidos por estudantes universitários. Considera que a escrita acadêmica formal é uma característica 
+                esperada e desejável, não um indicador de IA.
+            </div>
+
             <h3>📝 Cole seu texto para análise</h3>
-            <textarea class="text-area" id="textInput" placeholder="Cole o texto que deseja analisar aqui..."></textarea>
+            <textarea class="text-area" id="textInput" placeholder="Cole o texto acadêmico que deseja analisar aqui..."></textarea>
             
             <div class="stats" id="textStats">
                 Caracteres: 0 | Palavras: 0 | Frases: 0 | Parágrafos: 0
             </div>
             
-            <button class="analyze-btn" id="analyzeBtn">Analisar Texto</button>
+            <button class="analyze-btn" id="analyzeBtn">Analisar Texto Acadêmico</button>
             <div id="result"></div>
         </div>
     </div>
     
     <script>
-        // Padrões linguísticos típicos de IA (expandidos)
+        // PADRÕES REAIS DE IA - Focados em características genuinamente suspeitas
         const padroesIA = {
-            'expressoes_formais': [
-                'é importante destacar', 'convém ressaltar', 'considerando os fatores',
-                'pode-se inferir', 'é fundamental observar', 'observa-se que',
-                'conclui-se que', 'de maneira clara e objetiva', 'abordagem sistemática',
-                'o presente estudo', 'de acordo com', 'vale ressaltar', 'verifica-se que',
-                'cabe salientar', 'é pertinente mencionar', 'pressupõe-se que',
-                'constata-se que', 'infere-se que', 'depreende-se que', 'evidencia-se que',
-                'recomenda-se que', 'sugere-se que', 'propõe-se que', 'argumenta-se que',
-                'destaca-se que', 'salienta-se que', 'ressalta-se que', 'enfatiza-se que',
-                'sob essa perspectiva', 'nesse contexto', 'nesse sentido', 'nesse cenário',
-                'nessa conjuntura', 'nessa ótica', 'nessa perspectiva'
+            'padroes_estereotipados': [
+                // Padrões excessivamente genéricos e repetitivos de IA
+                'como um modelo de linguagem grande', 'treinado em vastos conjuntos de dados',
+                'com base no meu treinamento', 'como uma ia', 'inteligência artificial',
+                'modelo de linguagem', 'grande modelo de linguagem', 'assistente de ia',
+                'devo enfatizar que', 'é crucial notar que', 'imperativo destacar',
+                'cabe aqui sublinhar que', 'convém aqui assinalar que'
             ],
-            'conectivos_complexos': [
-                'portanto', 'consequentemente', 'adicionalmente', 'notavelmente',
-                'consideravelmente', 'significativamente', 'efetivamente',
-                'sobretudo', 'principalmente', 'especialmente', 'particularmente',
-                'igualmente', 'similarmente', 'analogamente', 'paralelamente',
-                'reciprocamente', 'correlatamente', 'correspondentemente'
+            'excesso_qualificadores': [
+                // Uso excessivo de qualificadores desnecessários
+                'profundamente significativo', 'extremamente relevante', 'altamente importante',
+                'consideravelmente impactante', 'notavelmente crucial', 'expressivamente vital'
             ],
-            'estruturas_passivas': [
-                'é realizado', 'é observado', 'é verificado', 'é constatado',
-                'é possível identificar', 'pode ser observado', 'deve ser considerado',
-                'são apresentados', 'foram analisados', 'será discutido', 'pode ser verificado',
-                'devem ser considerados', 'podem ser observados', 'poderão ser implementados'
+            'estruturas_formulas': [
+                // Estruturas de fórmula que parecem copiadas
+                'neste contexto, é importante considerar', 'um aspecto fundamental a ser abordado',
+                'vale aqui ressaltar que', 'cabe aqui mencionar que', 'convém aqui destacar que',
+                'importa aqui sublinhar que', 'cumpre aqui assinalar que'
             ],
-            'palavras_superlativas': [
-                'extremamente', 'altamente', 'profundamente', 'intensamente',
-                'significativamente', 'consideravelmente', 'notavelmente',
-                'expressivamente', 'substancialmente', 'exponencialmente',
-                'excepcionalmente', 'extraordinariamente', 'surpreendentemente'
+            'contradicoes_internas': [
+                // Padrões que podem indicar contradições ou falta de coerência
+                'por um lado.*por outro lado', 'embora.*é importante', 'apesar disso.*deve-se considerar'
             ],
-            'expressoes_impessoais': [
-                'há que se considerar', 'cabe mencionar', 'convém notar',
-                'vale observar', 'importa destacar', 'cumpre ressaltar',
-                'impõe-se considerar', 'recomenda-se atentar', 'sugere-se observar'
+            'generalizacoes_excessivas': [
+                // Generalizações vagas e excessivas
+                'é amplamente reconhecido que', 'como é sabido', 'como é de conhecimento geral',
+                'é universalmente aceito que', 'todos concordam que'
+            ]
+        };
+
+        // PADRÕES DE ESCRITA HUMANA EM CONTEXTO ACADÊMICO
+        const padroesHumanos = {
+            'expressoes_academicas_legitimas': [
+                // Expressões acadêmicas normais e esperadas
+                'de acordo com', 'segundo o autor', 'conforme proposto por',
+                'como afirma', 'na perspectiva de', 'o autor defende que',
+                'esta pesquisa demonstra', 'os resultados indicam', 'os dados mostram',
+                'pode-se observar que', 'verifica-se que', 'constata-se que'
+            ],
+            'referencias_pessoais': [
+                // Marcadores de envolvimento pessoal do autor
+                'nesta pesquisa', 'no presente estudo', 'este trabalho busca',
+                'pretende-se com este', 'o objetivo deste', 'parto do pressuposto',
+                'acredito que', 'entendo que', 'considero que'
+            ],
+            'voz_ativa_academica': [
+                // Uso de voz ativa em contexto acadêmico
+                'analiso', 'discuto', 'apresento', 'demonstro', 'argumento',
+                'proponho', 'examino', 'investigo', 'avalia-se', 'discute-se'
+            ],
+            'elementos_contextuais': [
+                // Elementos que mostram conhecimento do contexto
+                'na universidade', 'no departamento', 'na disciplina',
+                'orientado pelo professor', 'na bibliografia', 'nas leituras'
             ]
         };
 
@@ -233,141 +250,99 @@
             return paragrafos.filter(p => p.trim()).map(p => p.trim());
         }
 
-        // Função para analisar repetições
-        function analisarRepeticoes(frases) {
+        // Função para analisar repetições problemáticas
+        function analisarRepeticoesProblematicas(frases) {
             const repeticoes = [];
             const frasesSimplificadas = frases.map(f => 
                 f.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s+/g, ' ').trim()
             );
             
-            for (let i = 0; i < frasesSimplificadas.length; i++) {
-                for (let j = i + 1; j < frasesSimplificadas.length; j++) {
-                    if (frasesSimplificadas[i] && frasesSimplificadas[j] &&
-                        frasesSimplificadas[i] === frasesSimplificadas[j]) {
-                        repeticoes.push({
-                            frase: frases[i],
-                            tipo: 'repeticao',
-                            justificativa: 'Frase repetida exatamente',
-                            posicao: [i, j]
-                        });
-                    }
+            // Verificar repetições exatas em frases consecutivas
+            for (let i = 0; i < frasesSimplificadas.length - 1; i++) {
+                if (frasesSimplificadas[i] && frasesSimplificadas[i + 1] &&
+                    frasesSimplificadas[i] === frasesSimplificadas[i + 1]) {
+                    repeticoes.push({
+                        frase: frases[i],
+                        tipo: 'repeticao',
+                        justificativa: 'Repetição exata em frases consecutivas - padrão comum em IA',
+                        posicao: [i, i + 1]
+                    });
                 }
             }
             
             return repeticoes;
         }
 
-        // Função para analisar estrutura complexa
-        function analisarEstruturaComplexa(frases) {
-            const estruturasComplexas = [];
+        // Função para analisar coerência e progressão argumentativa
+        function analisarCoerencia(paragrafos) {
+            const problemas = [];
             
-            frases.forEach((frase, index) => {
-                // Verificar frases muito longas
-                if (frase.split(/\s+/).length > 30) {
-                    estruturasComplexas.push({
-                        termo: frase.substring(0, 50) + '...',
-                        tipo: 'estrutura_complexa',
-                        justificativa: 'Frase excessivamente longa e complexa',
-                        contexto: frase,
-                        posicao: [index, index]
-                    });
-                }
+            if (paragrafos.length < 2) return problemas;
+            
+            // Verificar transições entre parágrafos
+            for (let i = 0; i < paragrafos.length - 1; i++) {
+                const paragrafoAtual = paragrafos[i].toLowerCase();
+                const proximoParagrafo = paragrafos[i + 1].toLowerCase();
                 
-                // Verificar múltiplas cláusulas
-                const clausulas = frase.split(/[,;:]|\be\b|\bmas\b|\bporém\b|\bcontudo\b/gi);
-                if (clausulas.length >= 3) {
-                    estruturasComplexas.push({
-                        termo: frase.substring(0, 50) + '...',
-                        tipo: 'estrutura_complexa',
-                        justificativa: 'Frases com múltiplas cláusulas e subordinações',
-                        contexto: frase,
-                        posicao: [index, index]
-                    });
-                }
-            });
-            
-            return estruturasComplexas;
-        }
-
-        // Função para analisar emoção no texto
-        function analisarEmocao(texto) {
-            const palavrasPositivas = ['amo', 'adoro', 'incrível', 'maravilhoso', 'fantástico', 'excelente', 'perfeito'];
-            const palavrasNegativas = ['odeio', 'detesto', 'horrível', 'terrível', 'péssimo', 'ruim', 'chato'];
-            const palavrasNeutras = ['considerando', 'observando', 'analisando', 'verificando', 'constatando'];
-            
-            const palavras = tokenizacaoSimples(texto);
-            let emocaoScore = 0;
-            
-            palavras.forEach(palavra => {
-                if (palavrasPositivas.includes(palavra)) emocaoScore += 2;
-                if (palavrasNegativas.includes(palavra)) emocaoScore -= 2;
-                if (palavrasNeutras.includes(palavra)) emocaoScore -= 1;
-            });
-            
-            // Normalizar para escala 0-1
-            return Math.max(0, (emocaoScore + 10) / 20);
-        }
-
-        // Função para analisar termos suspeitos
-        function analisarTermosSuspeitos(texto) {
-            const termosDetectados = [];
-            const textoLower = texto.toLowerCase();
-            const frases = dividirFrases(texto);
-            
-            // Analisar expressões formais típicas de IA
-            padroesIA.expressoes_formais.forEach(expressao => {
-                const regex = new RegExp(expressao, 'gi');
-                let match;
-                while ((match = regex.exec(textoLower)) !== null) {
-                    const start = match.index;
-                    const end = start + match[0].length;
-                    const contexto = texto.substring(
-                        Math.max(0, start - 50), 
-                        Math.min(texto.length, end + 50)
-                    );
-                    
-                    termosDetectados.push({
-                        termo: texto.substring(start, end),
-                        tipo: 'expressao_formal',
-                        justificativa: 'Expressão excessivamente formal comum em textos de IA',
-                        contexto: contexto,
-                        posicao: [start, end],
-                        peso: 1.5
-                    });
-                }
-            });
-            
-            // Analisar conectivos complexos
-            padroesIA.conectivos_complexos.forEach(conectivo => {
-                const regex = new RegExp('\\b' + conectivo + '\\b', 'gi');
-                let match;
-                while ((match = regex.exec(textoLower)) !== null) {
-                    termosDetectados.push({
-                        termo: texto.substring(match.index, match.index + match[0].length),
-                        tipo: 'conectivo_complexo',
-                        justificativa: 'Uso frequente de conectivos complexos típico de IA',
-                        contexto: texto.substring(
-                            Math.max(0, match.index - 30), 
-                            Math.min(texto.length, match.index + match[0].length + 30)
-                        ),
-                        posicao: [match.index, match.index + match[0].length],
+                // Verificar se há mudança abrupta de tema
+                const palavrasChaveAtual = paragrafoAtual.split(/\s+/).slice(0, 10);
+                const palavrasChaveProximo = proximoParagrafo.split(/\s+/).slice(0, 10);
+                
+                const palavrasComuns = palavrasChaveAtual.filter(palavra => 
+                    palavrasChaveProximo.includes(palavra)
+                );
+                
+                if (palavrasComuns.length === 0) {
+                    problemas.push({
+                        tipo: 'coerencia',
+                        justificativa: 'Transição abrupta entre parágrafos - possível falta de coerência',
+                        contexto: `Parágrafos ${i + 1} e ${i + 2}`,
                         peso: 1.2
                     });
                 }
-            });
+            }
             
-            // Analisar estruturas passivas
-            padroesIA.estruturas_passivas.forEach(estrutura => {
-                const regex = new RegExp(estrutura, 'gi');
+            return problemas;
+        }
+
+        // Função para analisar padrões genuinamente suspeitos
+        function analisarPadroesSuspeitos(texto) {
+            const padroesDetectados = [];
+            const textoLower = texto.toLowerCase();
+            const frases = dividirFrases(texto);
+            const paragrafos = dividirParagrafos(texto);
+            
+            // Analisar padrões estereotipados de IA
+            padroesIA.padroes_estereotipados.forEach(expressao => {
+                const regex = new RegExp(expressao, 'gi');
                 let match;
                 while ((match = regex.exec(textoLower)) !== null) {
-                    termosDetectados.push({
+                    padroesDetectados.push({
                         termo: texto.substring(match.index, match.index + match[0].length),
-                        tipo: 'voz_passiva',
-                        justificativa: 'Uso excessivo de voz passiva, comum em textos formais de IA',
+                        tipo: 'padrao_ia',
+                        justificativa: 'Padrão estereotipado comum em textos gerados por IA',
                         contexto: texto.substring(
-                            Math.max(0, match.index - 40), 
-                            Math.min(texto.length, match.index + match[0].length + 40)
+                            Math.max(0, match.index - 50), 
+                            Math.min(texto.length, match.index + match[0].length + 50)
+                        ),
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: 1.8 // Alto peso para padrões genuinamente suspeitos
+                    });
+                }
+            });
+            
+            // Analisar excesso de qualificadores
+            padroesIA.excesso_qualificadores.forEach(qualificador => {
+                const regex = new RegExp('\\b' + qualificador + '\\b', 'gi');
+                let match;
+                while ((match = regex.exec(textoLower)) !== null) {
+                    padroesDetectados.push({
+                        termo: texto.substring(match.index, match.index + match[0].length),
+                        tipo: 'padrao_ia',
+                        justificativa: 'Uso excessivo de qualificadores - padrão comum em IA',
+                        contexto: texto.substring(
+                            Math.max(0, match.index - 30), 
+                            Math.min(texto.length, match.index + match[0].length + 30)
                         ),
                         posicao: [match.index, match.index + match[0].length],
                         peso: 1.3
@@ -375,93 +350,98 @@
                 }
             });
             
-            // Analisar palavras superlativas
-            padroesIA.palavras_superlativas.forEach(superlativo => {
-                const regex = new RegExp('\\b' + superlativo + '\\b', 'gi');
-                let match;
-                while ((match = regex.exec(textoLower)) !== null) {
-                    termosDetectados.push({
-                        termo: texto.substring(match.index, match.index + match[0].length),
-                        tipo: 'superlativo',
-                        justificativa: 'Uso frequente de intensificadores e superlativos',
-                        contexto: texto.substring(
-                            Math.max(0, match.index - 25), 
-                            Math.min(texto.length, match.index + match[0].length + 25)
-                        ),
-                        posicao: [match.index, match.index + match[0].length],
-                        peso: 1.1
-                    });
-                }
-            });
-            
-            // Analisar expressões impessoais
-            padroesIA.expressoes_impessoais.forEach(expressao => {
-                const regex = new RegExp(expressao, 'gi');
-                let match;
-                while ((match = regex.exec(textoLower)) !== null) {
-                    termosDetectados.push({
-                        termo: texto.substring(match.index, match.index + match[0].length),
-                        tipo: 'expressao_formal',
-                        justificativa: 'Expressão impessoal típica de linguagem formal/IA',
-                        contexto: texto.substring(
-                            Math.max(0, match.index - 40), 
-                            Math.min(texto.length, match.index + match[0].length + 40)
-                        ),
-                        posicao: [match.index, match.index + match[0].length],
-                        peso: 1.4
-                    });
-                }
-            });
-            
-            // Analisar repetições
-            const repeticoes = analisarRepeticoes(frases);
+            // Analisar repetições problemáticas
+            const repeticoes = analisarRepeticoesProblematicas(frases);
             repeticoes.forEach(rep => {
-                termosDetectados.push({
+                padroesDetectados.push({
                     termo: rep.frase.substring(0, 50) + (rep.frase.length > 50 ? '...' : ''),
                     tipo: 'repeticao',
                     justificativa: rep.justificativa,
-                    contexto: `Repetição nas frases ${rep.posicao[0] + 1} e ${rep.posicao[1] + 1}`,
+                    contexto: rep.contexto,
                     posicao: [0, 0],
                     peso: 1.6
                 });
             });
             
-            // Analisar estruturas complexas
-            const estruturasComplexas = analisarEstruturaComplexa(frases);
-            estruturasComplexas.forEach(est => {
-                termosDetectados.push({
-                    termo: est.termo,
-                    tipo: 'estrutura_complexa',
-                    justificativa: est.justificativa,
-                    contexto: est.contexto,
-                    posicao: est.posicao,
-                    peso: 1.3
+            // Analisar problemas de coerência
+            const problemasCoerencia = analisarCoerencia(paragrafos);
+            problemasCoerencia.forEach(prob => {
+                padroesDetectados.push({
+                    termo: prob.contexto,
+                    tipo: 'coerencia',
+                    justificativa: prob.justificativa,
+                    contexto: prob.contexto,
+                    posicao: [0, 0],
+                    peso: prob.peso
                 });
             });
             
-            return termosDetectados;
+            return padroesDetectados;
+        }
+
+        // Função para analisar características humanas
+        function analisarCaracteristicasHumanas(texto) {
+            const caracteristicas = [];
+            const textoLower = texto.toLowerCase();
+            
+            // Analisar expressões acadêmicas legítimas
+            padroesHumanos.expressoes_academicas_legitimas.forEach(expressao => {
+                const regex = new RegExp(expressao, 'gi');
+                let match;
+                while ((match = regex.exec(textoLower)) !== null) {
+                    caracteristicas.push({
+                        termo: texto.substring(match.index, match.index + match[0].length),
+                        tipo: 'escrita_humana',
+                        justificativa: 'Expressão acadêmica legítima e esperada',
+                        contexto: texto.substring(
+                            Math.max(0, match.index - 50), 
+                            Math.min(texto.length, match.index + match[0].length + 50)
+                        ),
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: -0.8 // Peso negativo - indica escrita humana
+                    });
+                }
+            });
+            
+            // Analisar referências pessoais
+            padroesHumanos.referencias_pessoais.forEach(referencia => {
+                const regex = new RegExp(referencia, 'gi');
+                let match;
+                while ((match = regex.exec(textoLower)) !== null) {
+                    caracteristicas.push({
+                        termo: texto.substring(match.index, match.index + match[0].length),
+                        tipo: 'escrita_humana',
+                        justificativa: 'Marcador de envolvimento pessoal do autor',
+                        contexto: texto.substring(
+                            Math.max(0, match.index - 40), 
+                            Math.min(texto.length, match.index + match[0].length + 40)
+                        ),
+                        posicao: [match.index, match.index + match[0].length],
+                        peso: -1.2 // Forte indicador de escrita humana
+                    });
+                }
+            });
+            
+            return caracteristicas;
         }
 
         // Função para gerar texto destacado
-        function gerarTextoDestacado(texto, termosDetectados) {
-            if (!termosDetectados || termosDetectados.length === 0) {
+        function gerarTextoDestacado(texto, padroesDetectados) {
+            if (!padroesDetectados || padroesDetectados.length === 0) {
                 return texto;
             }
             
             let textoDestacado = texto;
-            // Ordenar termos por posição (do final para o início para evitar problemas com índices)
-            const termosOrdenados = [...termosDetectados]
-                .filter(termo => termo.posicao[0] !== 0)
+            const padroesOrdenados = [...padroesDetectados]
+                .filter(padrao => padrao.posicao[0] !== 0)
                 .sort((a, b) => b.posicao[0] - a.posicao[0]);
             
-            termosOrdenados.forEach(termoInfo => {
-                const [start, end] = termoInfo.posicao;
+            padroesOrdenados.forEach(padraoInfo => {
+                const [start, end] = padraoInfo.posicao;
                 const termoOriginal = texto.substring(start, end);
                 
-                // Criar span com destaque
-                const spanDestacado = `<span class="termo-suspeito" data-tipo="${termoInfo.tipo}" title="${termoInfo.justificativa}">${termoOriginal}</span>`;
+                const spanDestacado = `<span class="padrao-detectado" data-tipo="${padraoInfo.tipo}" title="${padraoInfo.justificativa}">${termoOriginal}</span>`;
                 
-                // Inserir no texto
                 textoDestacado = textoDestacado.substring(0, start) + spanDestacado + textoDestacado.substring(end);
             });
             
@@ -470,15 +450,8 @@
 
         // Função para extrair features do texto
         function extrairFeatures(texto) {
-            let textoAnalise = texto;
-            if (texto.length > 5000) {
-                textoAnalise = texto.substring(0, 2000) + 
-                              texto.substring(texto.length/2 - 500, texto.length/2 + 500) + 
-                              texto.substring(texto.length - 2000);
-            }
-            
-            const palavras = tokenizacaoSimples(textoAnalise);
-            const frases = dividirFrases(textoAnalise);
+            const palavras = tokenizacaoSimples(texto);
+            const frases = dividirFrases(texto);
             const paragrafos = dividirParagrafos(texto);
             
             const features = {};
@@ -499,106 +472,91 @@
                 features.diversidade_lexical = 0;
             }
             
-            features.palavras_longas = palavras.length > 0 ? 
-                palavras.filter(p => p.length > 6).length / palavras.length : 0;
-            features.formalidade = calcularFormalidade(textoAnalise);
-            features.emocao = analisarEmocao(textoAnalise);
-            
             return features;
         }
 
-        // Função para calcular formalidade
-        function calcularFormalidade(texto) {
-            const palavrasFormais = ['portanto', 'consequentemente', 'adicionalmente', 'fundamental'];
-            const palavrasInformais = ['tipo', 'assim', 'ok', 'bem', 'acho', 'tá'];
-            
-            const textoLower = texto.toLowerCase();
-            let formal = 0;
-            let informal = 0;
-            
-            palavrasFormais.forEach(p => {
-                const matches = textoLower.match(new RegExp('\\b' + p + '\\b', 'g'));
-                if (matches) formal += matches.length;
-            });
-            
-            palavrasInformais.forEach(p => {
-                const matches = textoLower.match(new RegExp('\\b' + p + '\\b', 'g'));
-                if (matches) informal += matches.length;
-            });
-            
-            const total = tokenizacaoSimples(texto).length;
-            return total > 0 ? (formal - informal) / total : 0;
-        }
-
-        // Função para detectar IA
-        function detectarIA(texto) {
+        // Função principal de detecção - ABORDAGEM CORRIGIDA
+        function analisarTextoAcademico(texto) {
             if (!texto || texto.trim().length < 20) {
                 return {
                     ai_probability: 0.5,
                     human_probability: 0.5,
                     confidence: 0.1,
-                    termos_suspeitos: [],
+                    padroes_detectados: [],
                     texto_destacado: texto,
-                    metricas: {}
+                    metricas: {},
+                    recomendacoes: []
                 };
             }
             
             try {
-                // Análise de termos suspeitos
-                const termosSuspeitos = analisarTermosSuspeitos(texto);
-                const textoDestacado = gerarTextoDestacado(texto, termosSuspeitos);
+                // Análise de padrões suspeitos (genuínos)
+                const padroesSuspeitos = analisarPadroesSuspeitos(texto);
                 
-                // Análise tradicional
+                // Análise de características humanas
+                const caracteristicasHumanas = analisarCaracteristicasHumanas(texto);
+                
+                // Combinar todas as detecções
+                const todasDetectoes = [...padroesSuspeitos, ...caracteristicasHumanas];
+                const textoDestacado = gerarTextoDestacado(texto, todasDetectoes);
+                
+                // Análise de features básicas
                 const features = extrairFeatures(texto);
                 
-                // Cálculo de probabilidade baseado em múltiplos fatores
-                let probIA = 0.3;
+                // CÁLCULO CORRIGIDO - Considerando contexto acadêmico
+                let probIA = 0.2; // Base mais baixa - assumindo escrita humana acadêmica
                 
-                // Ajustar baseado em formalidade
-                if (features.formalidade > 0.05) {
-                    probIA += features.formalidade * 0.4;
+                // Apenas padrões genuinamente suspeitos aumentam probabilidade
+                const padroesIASuspeitos = padroesSuspeitos.filter(p => p.peso > 0);
+                if (padroesIASuspeitos.length > 0) {
+                    const pesoTotal = padroesIASuspeitos.reduce((sum, padrao) => sum + padrao.peso, 0);
+                    probIA = Math.min(0.9, probIA + (padroesIASuspeitos.length * 0.1 + pesoTotal * 0.05));
                 }
                 
-                // Ajustar baseado em termos suspeitos
-                if (termosSuspeitos.length > 0) {
-                    const pesoTotal = termosSuspeitos.reduce((sum, termo) => sum + (termo.peso || 1), 0);
-                    const pesoMedio = pesoTotal / termosSuspeitos.length;
-                    probIA = Math.min(0.95, probIA + (termosSuspeitos.length * pesoMedio * 0.03));
+                // Características humanas diminuem probabilidade
+                const caracteristicasHumanasFortes = caracteristicasHumanas.filter(c => c.peso < 0);
+                if (caracteristicasHumanasFortes.length > 0) {
+                    const pesoTotal = caracteristicasHumanasFortes.reduce((sum, car) => sum + Math.abs(car.peso), 0);
+                    probIA = Math.max(0.05, probIA - (caracteristicasHumanasFortes.length * 0.08 + pesoTotal * 0.03));
                 }
                 
-                // Ajustar baseado em diversidade lexical
-                if (features.diversidade_lexical < 0.5) {
-                    probIA += (0.5 - features.diversidade_lexical) * 0.3;
+                // Ajustes baseados em estrutura (mais conservadores)
+                if (features.diversidade_lexical < 0.4) { // Apenas diversidade muito baixa
+                    probIA += 0.15;
                 }
                 
-                // Ajustar baseado em emoção
-                if (features.emocao < 0.3) {
-                    probIA += (0.3 - features.emocao) * 0.2;
+                if (features.palavras_por_frase > 35) { // Apenas frases extremamente longas
+                    probIA += 0.1;
                 }
                 
-                // Ajustar baseado em estrutura
-                if (features.palavras_por_frase > 20) {
-                    probIA += Math.min(0.2, (features.palavras_por_frase - 20) * 0.02);
+                // Limitar entre 0.05 e 0.9
+                probIA = Math.max(0.05, Math.min(0.9, probIA));
+                
+                // Calcular confiança (mais conservadora)
+                let confianca = 0.4; // Base mais baixa
+                confianca += Math.abs(probIA - 0.5) * 0.3;
+                confianca += Math.min(0.2, padroesIASuspeitos.length * 0.08);
+                confianca += Math.min(0.1, features.num_palavras / 1500);
+                
+                confianca = Math.max(0.2, Math.min(0.85, confianca));
+                
+                // Gerar recomendações
+                const recomendacoes = [];
+                if (probIA > 0.7) {
+                    recomendacoes.push("Considere revisar o texto para incluir mais marcas de autoria pessoal");
+                    recomendacoes.push("Verifique a coerência entre os parágrafos");
+                } else if (probIA < 0.3) {
+                    recomendacoes.push("O texto apresenta fortes indícios de autoria humana");
+                    recomendacoes.push("Mantenha o engajamento pessoal e a coerência argumentativa");
                 }
                 
-                // Limitar entre 0.05 e 0.95
-                probIA = Math.max(0.05, Math.min(0.95, probIA));
-                
-                // Calcular confiança
-                let confianca = 0.5;
-                confianca += Math.abs(probIA - 0.5) * 0.5;
-                confianca += Math.min(0.2, termosSuspeitos.length * 0.05);
-                confianca += Math.min(0.1, features.num_palavras / 1000);
-                
-                confianca = Math.max(0.3, Math.min(0.95, confianca));
-                
-                // Agrupar termos por tipo para relatório
-                const termosPorTipo = {};
-                termosSuspeitos.forEach(termo => {
-                    if (!termosPorTipo[termo.tipo]) {
-                        termosPorTipo[termo.tipo] = [];
+                // Agrupar detecções por tipo
+                const padroesPorTipo = {};
+                todasDetectoes.forEach(padrao => {
+                    if (!padroesPorTipo[padrao.tipo]) {
+                        padroesPorTipo[padrao.tipo] = [];
                     }
-                    termosPorTipo[termo.tipo].push(termo);
+                    padroesPorTipo[padrao.tipo].push(padrao);
                 });
                 
                 const resultado = {
@@ -606,171 +564,149 @@
                     human_probability: Math.round((1 - probIA) * 1000) / 1000,
                     confidence: Math.round(confianca * 100) / 100,
                     text_analyzed_length: texto.length,
-                    termos_suspeitos: termosSuspeitos,
+                    padroes_detectados: todasDetectoes,
                     texto_destacado: textoDestacado,
                     metricas: features,
-                    estatisticas_deteccao: {
-                        total_termos: termosSuspeitos.length,
-                        termos_por_tipo: Object.fromEntries(
-                            Object.entries(termosPorTipo).map(([tipo, termos]) => [tipo, termos.length])
-                        ),
-                        densidade_termos: termosSuspeitos.length / texto.split(/\s+/).length,
-                        peso_total: termosSuspeitos.reduce((sum, termo) => sum + (termo.peso || 1), 0)
+                    recomendacoes: recomendacoes,
+                    estatisticas: {
+                        total_padroes: todasDetectoes.length,
+                        padroes_ia: padroesIASuspeitos.length,
+                        caracteristicas_humanas: caracteristicasHumanasFortes.length,
+                        padroes_por_tipo: Object.fromEntries(
+                            Object.entries(padroesPorTipo).map(([tipo, padroes]) => [tipo, padroes.length])
+                        )
                     }
                 };
                 
                 return resultado;
                 
             } catch (e) {
-                console.error("Erro na detecção:", e);
+                console.error("Erro na análise:", e);
                 return {
                     ai_probability: 0.5,
                     human_probability: 0.5,
                     confidence: 0.1,
-                    termos_suspeitos: [],
+                    padroes_detectados: [],
                     texto_destacado: texto,
-                    metricas: {}
+                    metricas: {},
+                    recomendacoes: []
                 };
             }
         }
 
         // Função para gerar relatório detalhado
         function gerarRelatorioDetalhado(result) {
-            const termos = result.termos_suspeitos || [];
+            const todasDetectoes = result.padroes_detectados || [];
+            const padroesIA = todasDetectoes.filter(p => p.tipo === 'padrao_ia' || p.tipo === 'repeticao' || p.tipo === 'coerencia');
+            const caracteristicasHumanas = todasDetectoes.filter(p => p.tipo === 'escrita_humana');
             
-            if (termos.length === 0) {
-                return `
-                    <div class="relatorio-termos">
-                        <h4>✅ Nenhum padrão suspeito detectado</h4>
-                        <p>O texto não apresenta os padrões típicos de IA analisados.</p>
-                    </div>
-                `;
-            }
+            let relatorioHTML = '';
             
-            // Agrupar termos por tipo
-            const termosPorTipo = {};
-            termos.forEach(termo => {
-                if (!termosPorTipo[termo.tipo]) {
-                    termosPorTipo[termo.tipo] = [];
-                }
-                termosPorTipo[termo.tipo].push(termo);
-            });
-            
-            // Gerar HTML para cada tipo
-            let tiposHTML = '';
-            for (const [tipo, termosTipo] of Object.entries(termosPorTipo)) {
-                let termosHTML = termosTipo.map(termo => `
-                    <div class="termo-item">
-                        <strong>"${termo.termo}"</strong> - ${termo.justificativa}
-                        <br><small>Contexto: "...${termo.contexto}..."</small>
-                    </div>
-                `).join('');
-                
-                const tipoLabel = {
-                    'expressao_formal': 'Expressões Formais',
-                    'conectivo_complexo': 'Conectivos Complexos',
-                    'voz_passiva': 'Voz Passiva',
-                    'superlativo': 'Superlativos',
-                    'repeticao': 'Repetições',
-                    'estrutura_complexa': 'Estruturas Complexas'
-                }[tipo] || tipo;
-                
-                tiposHTML += `
-                    <div class="tipo-termo">
-                        <h5>${tipoLabel} (${termosTipo.length} ocorrências)</h5>
-                        ${termosHTML}
-                    </div>
-                `;
-            }
-            
-            // Gerar métricas
-            let metricasHTML = '';
+            // Métricas
             if (result.metricas) {
                 const metricas = result.metricas;
-                metricasHTML = `
+                relatorioHTML += `
                     <div class="metricas">
                         <div class="metrica-card">
                             <div>Diversidade Lexical</div>
-                            <div class="metrica-valor" style="color: ${metricas.diversidade_lexical > 0.6 ? '#10b981' : '#ef4444'}">
+                            <div class="metrica-valor" style="color: ${metricas.diversidade_lexical > 0.5 ? '#10b981' : '#ef4444'}">
                                 ${Math.round(metricas.diversidade_lexical * 100)}%
                             </div>
-                            <small>${metricas.diversidade_lexical > 0.6 ? 'Alta diversidade' : 'Baixa diversidade'}</small>
-                        </div>
-                        <div class="metrica-card">
-                            <div>Formalidade</div>
-                            <div class="metrica-valor" style="color: ${metricas.formalidade > 0.1 ? '#ef4444' : '#10b981'}">
-                                ${Math.round(metricas.formalidade * 100)}%
-                            </div>
-                            <small>${metricas.formalidade > 0.1 ? 'Muito formal' : 'Pouco formal'}</small>
-                        </div>
-                        <div class="metrica-card">
-                            <div>Emoção</div>
-                            <div class="metrica-valor" style="color: ${metricas.emocao > 0.5 ? '#10b981' : '#64748b'}">
-                                ${Math.round(metricas.emocao * 100)}%
-                            </div>
-                            <small>${metricas.emocao > 0.5 ? 'Emocional' : 'Neutro'}</small>
+                            <small>${metricas.diversidade_lexical > 0.5 ? 'Boa variedade' : 'Pouca variedade'}</small>
                         </div>
                         <div class="metrica-card">
                             <div>Palavras por Frase</div>
-                            <div class="metrica-valor" style="color: ${metricas.palavras_por_frase > 20 ? '#ef4444' : '#10b981'}">
+                            <div class="metrica-valor" style="color: ${metricas.palavras_por_frase > 15 && metricas.palavras_por_frase < 30 ? '#10b981' : '#f59e0b'}">
                                 ${Math.round(metricas.palavras_por_frase)}
                             </div>
-                            <small>${metricas.palavras_por_frase > 20 ? 'Frases longas' : 'Frases curtas'}</small>
+                            <small>${metricas.palavras_por_frase > 30 ? 'Frases longas' : metricas.palavras_por_frase < 15 ? 'Frases curtas' : 'Equilibrado'}</small>
+                        </div>
+                        <div class="metrica-card">
+                            <div>Parágrafos</div>
+                            <div class="metrica-valor" style="color: #2563eb">
+                                ${metricas.num_paragrafos}
+                            </div>
+                            <small>Estrutura textual</small>
+                        </div>
+                        <div class="metrica-card">
+                            <div>Padrões Detectados</div>
+                            <div class="metrica-valor" style="color: ${padroesIA.length === 0 ? '#10b981' : '#ef4444'}">
+                                ${padroesIA.length}
+                            </div>
+                            <small>${padroesIA.length === 0 ? 'Nenhum padrão suspeito' : 'Padrões suspeitos'}</small>
                         </div>
                     </div>
                 `;
             }
             
-            return `
-                <div class="relatorio-termos">
-                    <h4>🔍 Relatório de Análise Detalhada</h4>
-                    <p><strong>${termos.length} termos/padrões suspeitos detectados</strong></p>
-                    
-                    ${metricasHTML}
-                    
-                    <div class="legenda">
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #ef4444;"></div>
-                            <span>Expressões Formais</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #faf5ff; border: 1px solid #8b5cf6;"></div>
-                            <span>Conectivos Complexos</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #ecfeff; border: 1px solid #06b6d4;"></div>
-                            <span>Voz Passiva</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #fffbeb; border: 1px solid #f59e0b;"></div>
-                            <span>Superlativos</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #dc2626;"></div>
-                            <span>Repetições</span>
-                        </div>
-                        <div class="legenda-item">
-                            <div class="legenda-cor" style="background-color: #f5f3ff; border: 1px solid #7c3aed;"></div>
-                            <span>Estruturas Complexas</span>
-                        </div>
+            // Legenda
+            relatorioHTML += `
+                <div class="legenda">
+                    <div class="legenda-item">
+                        <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #ef4444;"></div>
+                        <span>Padrões de IA</span>
                     </div>
-                    
-                    <div class="texto-destacado">
-                        <h5>Texto com termos destacados:</h5>
-                        <div>${result.texto_destacado}</div>
+                    <div class="legenda-item">
+                        <div class="legenda-cor" style="background-color: #ecfdf5; border: 1px solid #10b981;"></div>
+                        <span>Escrita Humana</span>
                     </div>
-                    
-                    <div style="margin-top: 20px;">
-                        <h5>📋 Detalhamento dos padrões detectados:</h5>
-                        ${tiposHTML}
-                    </div>
-                    
-                    <div class="dica">
-                        <strong>💡 Dica:</strong> Textos de IA geralmente apresentam formalidade excessiva, 
-                        estruturas repetitivas e falta de emoção genuína.
+                    <div class="legenda-item">
+                        <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #dc2626;"></div>
+                        <span>Repetições</span>
                     </div>
                 </div>
             `;
+            
+            // Texto destacado
+            relatorioHTML += `
+                <div class="texto-destacado">
+                    <h5>Texto com padrões destacados:</h5>
+                    <div>${result.texto_destacado}</div>
+                </div>
+            `;
+            
+            // Detalhamento dos padrões
+            if (padroesIA.length > 0) {
+                relatorioHTML += `
+                    <div style="margin-top: 20px;">
+                        <h5>🔍 Padrões que podem indicar uso de IA:</h5>
+                        ${padroesIA.map(padrao => `
+                            <div class="termo-item">
+                                <strong>"${padrao.termo}"</strong> - ${padrao.justificativa}
+                                <br><small>Contexto: "...${padrao.contexto}..."</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            // Características humanas
+            if (caracteristicasHumanas.length > 0) {
+                relatorioHTML += `
+                    <div style="margin-top: 20px;">
+                        <h5>✅ Características de escrita humana identificadas:</h5>
+                        ${caracteristicasHumanas.map(caracteristica => `
+                            <div class="termo-item">
+                                <strong>"${caracteristica.termo}"</strong> - ${caracteristica.justificativa}
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            }
+            
+            // Recomendações
+            if (result.recomendacoes && result.recomendacoes.length > 0) {
+                relatorioHTML += `
+                    <div class="dica">
+                        <h5>💡 Recomendações:</h5>
+                        <ul>
+                            ${result.recomendacoes.map(rec => `<li>${rec}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+            
+            return relatorioHTML;
         }
 
         // Event listeners
@@ -796,24 +732,23 @@
             
             button.disabled = true;
             button.textContent = 'Analisando...';
-            resultDiv.innerHTML = '<p>⏳ Analisando texto e identificando padrões suspeitos...</p>';
+            resultDiv.innerHTML = '<p>⏳ Analisando texto acadêmico...</p>';
             
-            // Simular processamento assíncrono
             setTimeout(() => {
                 try {
-                    const result = detectarIA(text);
+                    const result = analisarTextoAcademico(text);
                     const aiProb = Math.round(result.ai_probability * 100);
                     const humanProb = Math.round(result.human_probability * 100);
                     const confidence = Math.round(result.confidence * 100);
                     
                     let color = '#64748b';
-                    let veredito = 'Indeterminado';
+                    let veredito = 'Análise Inconclusiva';
                     if (aiProb > 70) {
                         color = '#ef4444';
-                        veredito = 'Provavelmente IA';
+                        veredito = 'Características de IA Detectadas';
                     } else if (humanProb > 70) {
                         color = '#10b981';
-                        veredito = 'Provavelmente Humano';
+                        veredito = 'Escrita Humana Provável';
                     }
                     
                     let relatorioHTML = gerarRelatorioDetalhado(result);
@@ -821,8 +756,8 @@
                     resultDiv.innerHTML = `
                         <div style="text-align: center; margin-bottom: 20px;">
                             <h3 style="color: ${color}">${veredito}</h3>
-                            <p>🤖 Probabilidade de IA: <strong style="font-size: 1.2em;">${aiProb}%</strong></p>
-                            <p>👤 Probabilidade Humana: <strong style="font-size: 1.2em;">${humanProb}%</strong></p>
+                            <p>🤖 Indicadores de IA: <strong style="font-size: 1.2em;">${aiProb}%</strong></p>
+                            <p>👤 Indicadores Humanos: <strong style="font-size: 1.2em;">${humanProb}%</strong></p>
                             <p>📊 Confiança da análise: ${confidence}%</p>
                         </div>
                         ${relatorioHTML}
@@ -832,17 +767,18 @@
                     resultDiv.innerHTML = '<p style="color: red;">❌ Erro na análise. Tente novamente.</p>';
                 } finally {
                     button.disabled = false;
-                    button.textContent = 'Analisar Texto';
+                    button.textContent = 'Analisar Texto Acadêmico';
                 }
             }, 1000);
         });
 
-        // Texto de exemplo
-        document.getElementById('textInput').value = `É importante destacar que a implementação de estratégias eficazes requer uma abordagem sistemática e coordenada. Considerando os fatores mencionados anteriormente, pode-se inferir que a solução proposta apresenta viabilidade técnica e operacional. Observa-se que os resultados obtidos são extremamente significativos e demonstram claramente a eficácia da metodologia empregada.
+        // Texto de exemplo acadêmico
+        document.getElementById('textInput').value = `Esta pesquisa busca analisar os impactos da transformação digital nas práticas pedagógicas do ensino superior. Parto do pressuposto de que as tecnologias digitais, quando adequadamente integradas, podem potencializar os processos de ensino e aprendizagem.
 
-Por outro lado, quando fui ao mercado hoje, o padeiro foi muito simpático comigo. Ele me deu um café e a gente conversou um pouco sobre o time de futebol. Achei bem legal isso, sabe?`;
+No contexto universitário atual, observa-se uma crescente incorporação de ferramentas digitais. Conforme demonstrado por Silva (2022), essa integração requer uma abordagem pedagógica consistente. Os dados coletados nesta pesquisa indicam que os docentes que participaram da formação continuada mostraram maior propensão à adoção de novas tecnologias.
 
-        // Atualizar estatísticas iniciais
+Considero que os resultados obtidos reforçam a importância do desenvolvimento profissional docente para a efetiva integração tecnológica.`;
+
         document.getElementById('textInput').dispatchEvent(new Event('input'));
     </script>
 </body>
