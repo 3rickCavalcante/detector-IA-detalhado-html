@@ -169,7 +169,7 @@
                 Caracteres: 0 | Palavras: 0 | Frases: 0 | Parágrafos: 0
             </div>
             
-            <button class="analyze-btn" onclick="analyzeText()" id="analyzeBtn">Analisar Texto</button>
+            <button class="analyze-btn" id="analyzeBtn">Analisar Texto</button>
             <div id="result"></div>
         </div>
     </div>
@@ -246,7 +246,7 @@
                         frasesSimplificadas[i] === frasesSimplificadas[j]) {
                         repeticoes.push({
                             frase: frases[i],
-                            tipo: 'repeticao_exata',
+                            tipo: 'repeticao',
                             justificativa: 'Frase repetida exatamente',
                             posicao: [i, j]
                         });
@@ -332,7 +332,7 @@
                         justificativa: 'Expressão excessivamente formal comum em textos de IA',
                         contexto: contexto,
                         posicao: [start, end],
-                        peso: 1.5 // Peso maior para expressões formais
+                        peso: 1.5
                     });
                 }
             });
@@ -421,8 +421,8 @@
                     tipo: 'repeticao',
                     justificativa: rep.justificativa,
                     contexto: `Repetição nas frases ${rep.posicao[0] + 1} e ${rep.posicao[1] + 1}`,
-                    posicao: [0, 0], // Posição não aplicável para repetições
-                    peso: 1.6 // Alto peso para repetições
+                    posicao: [0, 0],
+                    peso: 1.6
                 });
             });
             
@@ -451,7 +451,7 @@
             let textoDestacado = texto;
             // Ordenar termos por posição (do final para o início para evitar problemas com índices)
             const termosOrdenados = [...termosDetectados]
-                .filter(termo => termo.posicao[0] !== 0) // Filtrar repetições sem posição específica
+                .filter(termo => termo.posicao[0] !== 0)
                 .sort((a, b) => b.posicao[0] - a.posicao[0]);
             
             termosOrdenados.forEach(termoInfo => {
@@ -530,7 +530,7 @@
             return total > 0 ? (formal - informal) / total : 0;
         }
 
-        // Função para detectar IA (versão melhorada)
+        // Função para detectar IA
         function detectarIA(texto) {
             if (!texto || texto.trim().length < 20) {
                 return {
@@ -552,31 +552,31 @@
                 const features = extrairFeatures(texto);
                 
                 // Cálculo de probabilidade baseado em múltiplos fatores
-                let probIA = 0.3; // Base
+                let probIA = 0.3;
                 
                 // Ajustar baseado em formalidade
                 if (features.formalidade > 0.05) {
                     probIA += features.formalidade * 0.4;
                 }
                 
-                // Ajustar baseado em termos suspeitos (com pesos)
+                // Ajustar baseado em termos suspeitos
                 if (termosSuspeitos.length > 0) {
                     const pesoTotal = termosSuspeitos.reduce((sum, termo) => sum + (termo.peso || 1), 0);
                     const pesoMedio = pesoTotal / termosSuspeitos.length;
                     probIA = Math.min(0.95, probIA + (termosSuspeitos.length * pesoMedio * 0.03));
                 }
                 
-                // Ajustar baseado em diversidade lexical (IA tende a ter menor diversidade)
+                // Ajustar baseado em diversidade lexical
                 if (features.diversidade_lexical < 0.5) {
                     probIA += (0.5 - features.diversidade_lexical) * 0.3;
                 }
                 
-                // Ajustar baseado em emoção (IA tende a ser mais neutra)
+                // Ajustar baseado em emoção
                 if (features.emocao < 0.3) {
                     probIA += (0.3 - features.emocao) * 0.2;
                 }
                 
-                // Ajustar baseado em estrutura (frases muito longas)
+                // Ajustar baseado em estrutura
                 if (features.palavras_por_frase > 20) {
                     probIA += Math.min(0.2, (features.palavras_por_frase - 20) * 0.02);
                 }
@@ -584,11 +584,11 @@
                 // Limitar entre 0.05 e 0.95
                 probIA = Math.max(0.05, Math.min(0.95, probIA));
                 
-                // Calcular confiança baseada em múltiplos fatores
+                // Calcular confiança
                 let confianca = 0.5;
-                confianca += Math.abs(probIA - 0.5) * 0.5; // Mais confiante quando próximo dos extremos
-                confianca += Math.min(0.2, termosSuspeitos.length * 0.05); // Mais termos = mais confiança
-                confianca += Math.min(0.1, features.num_palavras / 1000); // Textos maiores = mais confiança
+                confianca += Math.abs(probIA - 0.5) * 0.5;
+                confianca += Math.min(0.2, termosSuspeitos.length * 0.05);
+                confianca += Math.min(0.1, features.num_palavras / 1000);
                 
                 confianca = Math.max(0.3, Math.min(0.95, confianca));
                 
@@ -634,70 +634,7 @@
             }
         }
 
-        // Event listeners e funções de UI
-        document.getElementById('textInput').addEventListener('input', function() {
-            const text = this.value;
-            const chars = text.length;
-            const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-            const sentences = text.split(/[.!?]+/).length - 1;
-            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim()).length;
-            document.getElementById('textStats').innerHTML = 
-                `Caracteres: ${chars} | Palavras: ${words} | Frases: ${sentences} | Parágrafos: ${paragraphs}`;
-        });
-
-        function analyzeText() {
-            const text = document.getElementById('textInput').value.trim();
-            const resultDiv = document.getElementById('result');
-            const button = document.getElementById('analyzeBtn');
-            
-            if (text.length < 20) {
-                resultDiv.innerHTML = '<p style="color: red;">⚠️ Texto muito curto (mínimo 20 caracteres)</p>';
-                return;
-            }
-            
-            button.disabled = true;
-            button.textContent = 'Analisando...';
-            resultDiv.innerHTML = '<p>⏳ Analisando texto e identificando padrões suspeitos...</p>';
-            
-            // Simular processamento assíncrono
-            setTimeout(() => {
-                try {
-                    const result = detectarIA(text);
-                    const aiProb = Math.round(result.ai_probability * 100);
-                    const humanProb = Math.round(result.human_probability * 100);
-                    const confidence = Math.round(result.confidence * 100);
-                    
-                    let color = '#64748b';
-                    let veredito = 'Indeterminado';
-                    if (aiProb > 70) {
-                        color = '#ef4444';
-                        veredito = 'Provavelmente IA';
-                    } else if (humanProb > 70) {
-                        color = '#10b981';
-                        veredito = 'Provavelmente Humano';
-                    }
-                    
-                    let relatorioHTML = gerarRelatorioDetalhado(result);
-                    
-                    resultDiv.innerHTML = `
-                        <div style="text-align: center; margin-bottom: 20px;">
-                            <h3 style="color: ${color}">${veredito}</h3>
-                            <p>🤖 Probabilidade de IA: <strong style="font-size: 1.2em;">${aiProb}%</strong></p>
-                            <p>👤 Probabilidade Humana: <strong style="font-size: 1.2em;">${humanProb}%</strong></p>
-                            <p>📊 Confiança da análise: ${confidence}%</p>
-                        </div>
-                        ${relatorioHTML}
-                    `;
-                } catch (error) {
-                    console.error("Erro:", error);
-                    resultDiv.innerHTML = '<p style="color: red;">❌ Erro na análise. Tente novamente.</p>';
-                } finally {
-                    button.disabled = false;
-                    button.textContent = 'Analisar Texto';
-                }
-            }, 1000);
-        }
-        
+        // Função para gerar relatório detalhado
         function gerarRelatorioDetalhado(result) {
             const termos = result.termos_suspeitos || [];
             
@@ -769,3 +706,73 @@
                         <div class="metrica-card">
                             <div>Emoção</div>
                             <div class="metrica-valor" style="color: ${metricas.emocao > 0.5 ? '#10b981' : '#64748b'}">
+                                ${Math.round(metricas.emocao * 100)}%
+                            </div>
+                            <small>${metricas.emocao > 0.5 ? 'Emocional' : 'Neutro'}</small>
+                        </div>
+                        <div class="metrica-card">
+                            <div>Palavras por Frase</div>
+                            <div class="metrica-valor" style="color: ${metricas.palavras_por_frase > 20 ? '#ef4444' : '#10b981'}">
+                                ${Math.round(metricas.palavras_por_frase)}
+                            </div>
+                            <small>${metricas.palavras_por_frase > 20 ? 'Frases longas' : 'Frases curtas'}</small>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="relatorio-termos">
+                    <h4>🔍 Relatório de Análise Detalhada</h4>
+                    <p><strong>${termos.length} termos/padrões suspeitos detectados</strong></p>
+                    
+                    ${metricasHTML}
+                    
+                    <div class="legenda">
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #ef4444;"></div>
+                            <span>Expressões Formais</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #faf5ff; border: 1px solid #8b5cf6;"></div>
+                            <span>Conectivos Complexos</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #ecfeff; border: 1px solid #06b6d4;"></div>
+                            <span>Voz Passiva</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #fffbeb; border: 1px solid #f59e0b;"></div>
+                            <span>Superlativos</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #fef2f2; border: 1px solid #dc2626;"></div>
+                            <span>Repetições</span>
+                        </div>
+                        <div class="legenda-item">
+                            <div class="legenda-cor" style="background-color: #f5f3ff; border: 1px solid #7c3aed;"></div>
+                            <span>Estruturas Complexas</span>
+                        </div>
+                    </div>
+                    
+                    <div class="texto-destacado">
+                        <h5>Texto com termos destacados:</h5>
+                        <div>${result.texto_destacado}</div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <h5>📋 Detalhamento dos padrões detectados:</h5>
+                        ${tiposHTML}
+                    </div>
+                    
+                    <div class="dica">
+                        <strong>💡 Dica:</strong> Textos de IA geralmente apresentam formalidade excessiva, 
+                        estruturas repetitivas e falta de emoção genuína.
+                    </div>
+                </div>
+            `;
+        }
+
+        // Event listeners
+        document.getElementById('textInput').addEventListener('input', function() {
+            const
